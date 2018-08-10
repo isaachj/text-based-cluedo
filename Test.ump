@@ -1,0 +1,74 @@
+class Suggestion {
+    Player suggestor;
+    boolean isAccusation;
+    WeaponCard weapon;
+    RoomCard room;
+    CharacterCard character;
+
+    boolean equals(Suggestion s) {
+        return this.getWeapon().equals(s.getWeapon()) &&
+                this.getRoom().equals(s.getRoom()) &&
+                this.getCharacter().equals(s.getCharacter());
+    }
+
+    boolean contains(Card c) {
+        return weapon.equals(c) || room.equals(c) || character.equals(c);
+    }
+
+
+}
+
+class Card {
+    String name;
+
+    String getPrintable() {
+        return this.getName();
+    }
+
+    abstract boolean equals(Card c);
+}
+
+class WeaponCard {
+    isA Card;
+
+    String getPrintable() {
+        return "\n   Weapon: " + this.getName();
+    }
+
+    boolean equals(Card c) {
+        if(c instanceof WeaponCard && c.getName.equals(this.getName)) {
+            return true;
+        }
+        return false;
+    }
+}
+
+class CharacterCard {
+    isA Card;
+
+    String getPrintable() {
+        return "\nCharacter: " + this.getName();
+    }
+
+    boolean equals(Card c) {
+        if(c instanceof CharacterCard && c.getName.equals(this.getName)) {
+            return true;
+        }
+        return false;
+    }
+}
+
+class RoomCard {
+    isA Card;
+
+    String getPrintable() {
+        return "\n     Room: " + this.getName();
+    }
+
+    boolean equals(Card c) {
+        if(c instanceof RoomCard && c.getName.equals(this.getName)) {
+            return true;
+        }
+        return false;
+    }
+}
