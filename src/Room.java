@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 
+/**
+ * represents a room on the game board
+ */
 public class Room {
 
     private String name;
-    private ArrayList<Tile> tiles = new ArrayList<>();
+    private ArrayList<Tile> tiles = new ArrayList<>(); // list of the tiles inside the room
     private Board board;
 
     Room(String name, Board board){
