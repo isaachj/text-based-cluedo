@@ -22,6 +22,16 @@ public class Suggestion
     // CONSTRUCTOR
     //------------------------
 
+    // secondary constructor for creating the murder circumstance
+    public Suggestion(WeaponCard aWeapon, RoomCard aRoom, CharacterCard aCharacter)
+    {
+        suggestor = null;
+        isAccusation = false;
+        weapon = aWeapon;
+        room = aRoom;
+        character = aCharacter;
+    }
+
     public Suggestion(Player aSuggestor, boolean aIsAccusation, WeaponCard aWeapon, RoomCard aRoom, CharacterCard aCharacter)
     {
         suggestor = aSuggestor;

@@ -103,4 +103,8 @@ public class Player {
     public String getPrintable() {
         return printable;
     }
+
+    public void setPrintable(String printable){
+        this.printable = printable;
+    }
 }
