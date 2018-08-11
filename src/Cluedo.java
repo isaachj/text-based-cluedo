@@ -1,4 +1,3 @@
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,14 +6,13 @@ import java.util.Scanner;
  */
 public class Cluedo {
 
-    //public enum Direction { UP, DOWN, LEFT, RIGHT }
-
     private final int BOARD_WIDTH = 24;
 
     private ArrayList<Room> rooms = new ArrayList<>();
     private Board board = new Board();
     private int numPlayers;
     private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Card> deck = new ArrayList<>();
 
     private Cluedo(){ setUpBoard(); }
 
@@ -22,17 +20,17 @@ public class Cluedo {
      * game logic
      */
     private void run(){
-        redraw();
-
         Scanner in = new Scanner(System.in);
-        System.out.print("Please enter the number of players: ");
+        do {
+            System.out.print("Please enter the number of players(3 - 6): ");
+            try {
+                numPlayers = Integer.parseInt(in.nextLine());
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid Format!");
+            }
 
-        try{
-            numPlayers = Integer.parseInt(in.nextLine());
-        }catch(NumberFormatException nfe){
-            System.err.println("Invalid Format!");
-        }
-        System.out.println("You entered : " + numPlayers);
+            System.out.println("You entered : " + numPlayers);
+        } while (numPlayers > 6 || numPlayers < 3);
 
         // setup players here
         players.add(new Player(board.getBoard()[2][2], board));
@@ -43,8 +41,9 @@ public class Cluedo {
 
         // basic logic goes here
         int count = 0;
-        while (true){
 
+        redraw();
+        while (true){
             for (Player p : players) {
 
                 int moves = roll();
@@ -70,7 +69,10 @@ public class Cluedo {
 
     }
 
-    public void redraw(){ board.draw(); }
+    public void redraw(){
+        System.out.flush();
+        board.draw();
+    }
 
     /**
      * Fills the board array with empty tiles
@@ -107,7 +109,7 @@ public class Cluedo {
     /**
      * Adds the appropriate tiles to their respective rooms based on the layout string
      * The layout string represents the boad with each character representing a different room
-     * 'X' represents inaccessible areas of the map and walls
+     * 'X' represents inaccessible areas of the map, such as walls
      * '_' represents accessible tiles that are not part of a room
      * 'E' represents the end of the string
      */
@@ -156,6 +158,10 @@ public class Cluedo {
         for (Room r : rooms){
             r.setPrintable();
         }
+    }
+
+    private void setUpCards(){
+
     }
 
     /**
