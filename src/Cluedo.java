@@ -46,7 +46,7 @@ public class Cluedo {
             for (Player p : players) {
                 System.out.print("Enter direction to move: (WASD)");
                 String dir = in.nextLine();
-                p.move(dir);
+                p.parseMove(dir);
             }
 
 
@@ -57,7 +57,7 @@ public class Cluedo {
             redraw();
 
 
-            if (count == 5) { break; }
+            if (count == 20) { break; }
 
             count++;
         }
@@ -106,7 +106,7 @@ public class Cluedo {
      * 'E' represents the end of the string
      */
     public void parseLayout(){
-        String layout =
+        String layout;/* =
                 "XXXXXXXXX_XXXX_XXXXXXXXX" +
                 "KKKKKKX___BBBB___XCCCCCC" +
                 "KKKKKK__BBBBBBBB__CCCCCC" +
@@ -131,12 +131,39 @@ public class Cluedo {
                 "OOOOOOO__HHHHHH__SSSSSSS" +
                 "OOOOOOO__HHHHHH__SSSSSSS" +
                 "OOOOOOO__HHHHHH__SSSSSSS" +
-                "OOOOOOX_XHHHHHHX_XSSSSSSE";
+                "OOOOOOX_XHHHHHHX_XSSSSSSE";*/
+
+         layout = // Same layout but the walls are marked with X's
+                "XXXXXXXXX_XXXX_XXXXXXXXX" +
+                "XXXXXXX___XXXX___XXXXXXX" +
+                "XKKKKX__XXXBBXXX__XCCCCX" +
+                "XKKKKX__XBBBBBBX__XCCCCX" +
+                "XKKKKX__XBBBBBBX__CCCCCX" +
+                "XXKKKX__BBBBBBBB___XXXXX" +
+                "XXXXKX__XBBBBBBX________" +
+                "________XBXXXXBX_______X" +
+                "X_________________XXXXXX" +
+                "XXXXX_____________IIIIIX" +
+                "XDDDXXXX__XXXXX___XIIIIX" +
+                "XDDDDDDX__XXXXX___XIIIIX" +
+                "XDDDDDDD__XXXXX___XXXXIX" +
+                "XDDDDDDX__XXXXX________X" +
+                "XDDDDDDX__XXXXX___XXLXXX" +
+                "XXXXXXDX__XXXXX__XXLLLLX" +
+                "X_________XXXXX__LLLLLLX" +
+                "_________________XXLLLLX" +
+                "X________XXHHXX___XXXXXX" +
+                "XXXXXLX__XHHHHX_________" +
+                "XOOOOOX__XHHHHH________X" +
+                "XOOOOOX__XHHHHX__XSXXXXX" +
+                "XOOOOOX__XHHHHX__XSSSSSX" +
+                "XOOOOOX__XHHHHX__XSSSSSX" +
+                "XXXXXXX_XXXXXXXX_XXXXXXXE";
 
         for (int i = 0; layout.charAt(i) != 'E'; i++) {
             if (layout.charAt(i) == 'X') {
                 board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setAccessible();
-                board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setPrintable("X");
+                board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setPrintable("+");
             } else {
                 for (Room r : rooms) {
                     if (layout.charAt(i) == r.getPrintable().charAt(0)) {
