@@ -22,6 +22,8 @@ public class Cluedo {
      * game logic
      */
     private void run(){
+        redraw();
+
         Scanner in = new Scanner(System.in);
         System.out.print("Please enter the number of players: ");
 
@@ -33,7 +35,7 @@ public class Cluedo {
         System.out.println("You entered : " + numPlayers);
 
         // setup players here
-        players.add(new Player(board.getBoard()[1][1], board));
+        players.add(new Player(board.getBoard()[2][2], board));
 
         // generate murder
 
@@ -44,15 +46,19 @@ public class Cluedo {
         while (true){
 
             for (Player p : players) {
-                System.out.print("Enter direction to move: (WASD)");
-                String dir = in.nextLine();
-                p.parseMove(dir);
+
+                int moves = roll();
+                System.out.println("You rolled: " + moves);
+
+                while (moves != 0) {
+                    System.out.println("Enter direction to move: (WASD)");
+                    String dir = in.nextLine();
+                    p.parseMove(dir);
+                    redraw();
+                    moves--;
+                    System.out.println("You have " + moves + " moves left");
+                }
             }
-
-
-
-
-
 
             redraw();
 
@@ -101,39 +107,12 @@ public class Cluedo {
     /**
      * Adds the appropriate tiles to their respective rooms based on the layout string
      * The layout string represents the boad with each character representing a different room
-     * 'X' represents inaccessible areas of the map
-     * '_' represents accessible tiles tha are not part of a room
+     * 'X' represents inaccessible areas of the map and walls
+     * '_' represents accessible tiles that are not part of a room
      * 'E' represents the end of the string
      */
     public void parseLayout(){
-        String layout;/* =
-                "XXXXXXXXX_XXXX_XXXXXXXXX" +
-                "KKKKKKX___BBBB___XCCCCCC" +
-                "KKKKKK__BBBBBBBB__CCCCCC" +
-                "KKKKKK__BBBBBBBB__CCCCCC" +
-                "KKKKKK__BBBBBBBB__CCCCCC" +
-                "KKKKKK__BBBBBBBB___CCCCX" +
-                "XKKKKK__BBBBBBBB________" +
-                "________BBBBBBBB_______X" +
-                "X_________________IIIIII" +
-                "DDDDD_____________IIIIII" +
-                "DDDDDDDD__XXXXX___IIIIII" +
-                "DDDDDDDD__XXXXX___IIIIII" +
-                "DDDDDDDD__XXXXX___IIIIII" +
-                "DDDDDDDD__XXXXX________X" +
-                "DDDDDDDD__XXXXX___LLLLLX" +
-                "DDDDDDDD__XXXXX__LLLLLLL" +
-                "X_________XXXXX__LLLLLLL" +
-                "_________________LLLLLLL" +
-                "X________HHHHHH___LLLLLX" +
-                "OOOOOOO__HHHHHH_________" +
-                "OOOOOOO__HHHHHH________X" +
-                "OOOOOOO__HHHHHH__SSSSSSS" +
-                "OOOOOOO__HHHHHH__SSSSSSS" +
-                "OOOOOOO__HHHHHH__SSSSSSS" +
-                "OOOOOOX_XHHHHHHX_XSSSSSSE";*/
-
-         layout = // Same layout but the walls are marked with X's
+        String layout =
                 "XXXXXXXXX_XXXX_XXXXXXXXX" +
                 "XXXXXXX___XXXX___XXXXXXX" +
                 "XKKKKX__XXXBBXXX__XCCCCX" +
@@ -177,6 +156,14 @@ public class Cluedo {
         for (Room r : rooms){
             r.setPrintable();
         }
+    }
+
+    /**
+     * represents rolling two 6-sided dice
+     * @return the sum of the two dice rolls
+     */
+    private int roll(){
+        return (int) ((Math.random() * 6) + (Math.random() * 6));
     }
 
     public static void main(String[] args) {
