@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/text-based-cluedo.iml" filepath="$PROJECT_DIR$/.idea/text-based-cluedo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Cluedo.iml" filepath="$PROJECT_DIR$/Cluedo.iml" />
     </modules>
   </component>
 </project>
