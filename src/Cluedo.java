@@ -52,31 +52,13 @@ public class Cluedo {
         // game logic
         int count = 0;
         redraw();
-        while (true){
+        boolean gameWon = false;
+        while (!gameWon){
             for (Player p : players) {
 
-                System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn");
+                // Do the player's turn.
+                gameWon = doTurn(p, in);
 
-                int moves = roll();
-
-                System.out.println("You rolled: " + moves);
-
-                while (moves != 0) {
-
-                    System.out.println("Enter direction to move: (WASD)");
-                    String dir = in.nextLine();
-
-                    if (!p.parseMove(dir)){
-
-                        System.out.println("Invalid Direction");
-
-                    }else {
-
-                        redraw();
-                        moves--;
-                        System.out.println("You have " + moves + " moves left");
-                    }
-                }
             }
 
             redraw();
@@ -86,6 +68,40 @@ public class Cluedo {
             count++;
         }
 
+    }
+
+    /**
+     * @param p - The player
+     * @param in - The scanner (for getting input)
+     * @return
+     */
+    private boolean doTurn(Player p, Scanner in) {
+
+        System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn");
+
+        int moves = roll(); // Find out how many moves the player will have
+        System.out.println("You rolled: " + moves);
+
+        while (moves != 0) {
+
+            System.out.println("Enter direction to move: (WASD)");
+            String dir = in.nextLine();
+
+            if (p.parseInput(dir)){
+
+                redraw();
+                moves--;
+                System.out.println("You have " + moves + " moves left");
+
+            }else {
+
+                redraw();
+
+            }
+
+        }
+
+        return false;
     }
 
     public void redraw(){
@@ -251,7 +267,7 @@ public class Cluedo {
      * @return the sum of the two dice rolls
      */
     private int roll(){
-        return (int) ((Math.random() * 6) + (Math.random() * 6));
+        return (int) ((Math.random() * 5 + 1) + (Math.random() * 5 + 1));
     }
 
     public static void main(String[] args) {

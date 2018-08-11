@@ -20,10 +20,10 @@ public class Player {
     }
 
     /**
-     * Moves the character based on the input.
+     * Decides what to do based on the input.
      * @param input - A string representing the input character.
      */
-    public boolean parseMove(String input){
+    public boolean parseInput(String input){
 
         switch (input.toUpperCase()){
             case "W":
@@ -49,16 +49,24 @@ public class Player {
      */
     private boolean move(int drow, int dcol) {
 
+        boolean moveCost;
+
         Tile next = board.get(location.getRow() + drow, location.getCol() + dcol);
         if(next != null && next.isAccessible()) {
+
+            // If the player is moving within a room, don't make it cost anything.
+            moveCost = true;
+            if(next.getRoom() != null && location.getRoom() != null) moveCost = false;
+
             location.setContains(null);
             location = next;
             location.setContains(this);
-            return true;
         } else {
             System.out.println("Cannot move through walls.");
-            return false;
+            moveCost = false;
         }
+
+        return moveCost;
     }
 
     /**
@@ -87,6 +95,16 @@ public class Player {
             System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")\n");
             i++;
         }
+    }
+
+    /**
+     * Moves the player to the target tile.
+     * @param t - The target tile
+     */
+    public void moveTo(Tile t) {
+        location.setContains(null);
+        location = t;
+        location.setContains(this);
     }
 
     /**
