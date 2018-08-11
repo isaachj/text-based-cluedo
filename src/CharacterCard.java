@@ -12,59 +12,56 @@ public class CharacterCard extends Card
     //------------------------
 
     //CharacterCard Attributes
-    private int startX;
-    private int startY;
+    private int startRow;
+    private int startCol;
 
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    public CharacterCard(String aName, int aStartX, int aStartY)
+    public CharacterCard(String aName, int aStartRow, int aStartCol)
     {
         super(aName);
-        startX = aStartX;
-        startY = aStartY;
+        startRow = aStartRow;
+        startCol = aStartCol;
     }
 
     //------------------------
     // INTERFACE
     //------------------------
 
-    public boolean setStartX(int aStartX)
+    public boolean setStartRow(int aStartRow)
     {
         boolean wasSet = false;
-        startX = aStartX;
+        startRow = aStartRow;
         wasSet = true;
         return wasSet;
     }
 
-    public boolean setStartY(int aStartY)
+    public boolean setStartCol(int aStartCol)
     {
         boolean wasSet = false;
-        startY = aStartY;
+        startCol = aStartCol;
         wasSet = true;
         return wasSet;
     }
 
-    public int getStartX()
+    public int getStartRow()
     {
-        return startX;
+        return startRow;
     }
 
-    public int getStartY()
+    public int getStartCol()
     {
-        return startY;
-    }
-
-    public void delete()
-    {
-        super.delete();
+        return startCol;
     }
 
     // line 56 "model.ump"
     public String getPrintable(){
         return "\nCharacter: " + this.getName();
     }
+
+    public String getType(){ return "Character"; }
 
     // line 60 "model.ump"
     public boolean equals(Card c){
@@ -78,7 +75,7 @@ public class CharacterCard extends Card
     public String toString()
     {
         return super.toString() + "["+
-                "startX" + ":" + getStartX()+ "," +
-                "startY" + ":" + getStartY()+ "]";
+                "startRow" + ":" + getStartRow()+ "," +
+                "startCol" + ":" + getStartCol()+ "]";
     }
 }

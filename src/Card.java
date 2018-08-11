@@ -40,13 +40,12 @@ public abstract class Card
         return name;
     }
 
-    public void delete()
-    {}
-
     // line 29 "model.ump"
     public String getPrintable(){
         return this.getName();
     }
+
+    public abstract String getType();
 
     public abstract boolean equals(Card c);
 

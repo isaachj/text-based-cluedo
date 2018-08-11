@@ -24,15 +24,12 @@ public class RoomCard extends Card
     // INTERFACE
     //------------------------
 
-    public void delete()
-    {
-        super.delete();
-    }
-
     // line 71 "model.ump"
     public String getPrintable(){
         return "\n     Room: " + this.getName();
     }
+
+    public String getType(){ return "Room"; }
 
     // line 75 "model.ump"
     public boolean equals(Card c){

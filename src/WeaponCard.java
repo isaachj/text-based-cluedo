@@ -24,15 +24,12 @@ public class WeaponCard extends Card
     // INTERFACE
     //------------------------
 
-    public void delete()
-    {
-        super.delete();
-    }
-
     // line 39 "model.ump"
     public String getPrintable(){
         return "\n   Weapon: " + this.getName();
     }
+
+    public String getType(){ return "Weapon"; }
 
     // line 43 "model.ump"
     public boolean equals(Card c){
