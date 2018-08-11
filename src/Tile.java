@@ -6,8 +6,9 @@ public class Tile {
 
     private int row, col;
     private Room room;
-    private String printable = "_";
+    private String printable = " ";
     private boolean accessible = true;
+    private Object contains = null;
 
     Tile (int row, int col){
         this.row = row;

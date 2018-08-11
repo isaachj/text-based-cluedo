@@ -73,7 +73,7 @@ public class Cluedo {
         for (int i = 0; layout.charAt(i) != 'E'; i++) {
             if (layout.charAt(i) == 'X') {
                 board.getBoard()[i / 24][i % 24].setAccessible();
-                board.getBoard()[i / 24][i % 24].setPrintable(" ");
+                board.getBoard()[i / 24][i % 24].setPrintable("X");
             } else {
                 for (Room r : rooms) {
                     if (layout.charAt(i) == r.getPrintable().charAt(0)) {

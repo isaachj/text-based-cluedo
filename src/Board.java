@@ -3,7 +3,7 @@
  */
 public class Board {
 
-    private Tile[][] board = new Tile[25][24];
+    private Tile[][] board = new Tile[26][25];
 
     public Tile[][] getBoard() {
         return board;
