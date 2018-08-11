@@ -8,12 +8,12 @@ public class Room {
     private String name;
     private ArrayList<Tile> tiles = new ArrayList<>(); // list of the tiles inside the room
     private Board board;
+    private String printable;
 
-    Room(String name, Board board){
+    Room(String name, Board board, String printable){
         this.name = name;
         this.board = board;
-
-
+        this.printable = printable;
     }
 
     public String getName() {
@@ -24,11 +24,14 @@ public class Room {
         return tiles;
     }
 
-    public void setPrintable(){
-        for (int i = 5; i < 10; i++){
-            for (int j = 5; j < 10; j++){
-                board.getBoard()[i][j].setPrintable("R");
-            }
+    public void addTile(Tile tile){ tiles.add(tile); }
+
+    public String getPrintable(){ return printable; }
+
+    void setPrintable(){
+        for (Tile t : tiles){
+            t.setRoom(this);
+            t.setPrintable(printable);
         }
     }
 }

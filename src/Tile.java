@@ -14,12 +14,6 @@ public class Tile {
         this.col = col;
     }
 
-    Tile (int row, int col, Room room){
-        this.row = row;
-        this.col = col;
-        this.room = room;
-    }
-
     public int getCol() {
         return col;
     }
@@ -32,15 +26,11 @@ public class Tile {
         return room;
     }
 
+    public void setRoom(Room room) { this.room = room; }
+
     public boolean isAccessible() { return accessible; }
 
-    public void setAccessible() {
-        if (accessible){
-            accessible = false;
-        } else {
-            accessible = true;
-        }
-    }
+    public void setAccessible() { accessible = !accessible; }
 
     public String getPrintable(){ return printable; }
 

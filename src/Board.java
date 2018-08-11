@@ -3,7 +3,7 @@
  */
 public class Board {
 
-    private Tile[][] board = new Tile[24][25];
+    private Tile[][] board = new Tile[25][24];
 
     public Tile[][] getBoard() {
         return board;
@@ -14,11 +14,9 @@ public class Board {
 
         for (int i = 0; i < board.length; i++){
 
-            //output = output.concat("| ");
-
             for (int j = 0; j < board[1].length; j++){
 
-                output = output.concat(" " + board[i][j].getPrintable()/* + " | "*/);
+                output = output.concat(" " + board[i][j].getPrintable());
 
             }
 
