@@ -3,9 +3,7 @@ An assignment for SWEN225 at Victoria University
 
 # Assignment Specs
 You are to implement a prototype of program allowing people to play a version of the board game
-Cluedo on a desktop computer. If you have not heard of the game Cluedo before, don’t worry, a
-specification detailing what you need to do is provided and you may always consult the game manual
-or the Wikipedia description of Cluedo.
+Cluedo on a desktop computer. 
 
 # The Rules
 Every character, weapon and room is represented by a card in the game. Before the game starts, one
