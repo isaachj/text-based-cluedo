@@ -1,16 +1,67 @@
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
- * Contains the game logic
+ * Contains the game logic and sets up the default game state
  */
 public class Cluedo {
 
-    ArrayList<Room> rooms = new ArrayList<>();
-    Board board = new Board();
+    //public enum Direction { UP, DOWN, LEFT, RIGHT }
 
-    private Cluedo(){
-        setUpBoard();
-        redraw();
+    private final int BOARD_WIDTH = 24;
+
+    private ArrayList<Room> rooms = new ArrayList<>();
+    private Board board = new Board();
+    private int numPlayers;
+    private ArrayList<Player> players = new ArrayList<>();
+
+    private Cluedo(){ setUpBoard(); }
+
+    /**
+     * game logic
+     */
+    private void run(){
+        Scanner in = new Scanner(System.in);
+        System.out.print("Please enter the number of players: ");
+
+        try{
+            numPlayers = Integer.parseInt(in.nextLine());
+        }catch(NumberFormatException nfe){
+            System.err.println("Invalid Format!");
+        }
+        System.out.println("You entered : " + numPlayers);
+
+        // setup players here
+        players.add(new Player(board.getBoard()[1][1], board));
+
+        // generate murder
+
+        // distribute cards
+
+        // basic logic goes here
+        int count = 0;
+        while (true){
+
+            for (Player p : players) {
+                System.out.print("Enter direction to move: (WASD)");
+                String dir = in.nextLine();
+                p.move(dir);
+            }
+
+
+
+
+
+
+            redraw();
+
+
+            if (count == 5) { break; }
+
+            count++;
+        }
+
     }
 
     public void redraw(){ board.draw(); }
@@ -28,6 +79,9 @@ public class Cluedo {
         setUpRooms();
     }
 
+    /**
+     * Creates the rooms objects
+     */
     public void setUpRooms(){
 
         rooms.add(new Room("Kitchen", board, "K"));
@@ -44,7 +98,13 @@ public class Cluedo {
 
     }
 
-    // theres gotta be a better way
+    /**
+     * Adds the appropriate tiles to their respective rooms based on the layout string
+     * The layout string represents the boad with each character representing a different room
+     * 'X' represents inaccessible areas of the map
+     * '_' represents accessible tiles tha are not part of a room
+     * 'E' represents the end of the string
+     */
     public void parseLayout(){
         String layout =
                 "XXXXXXXXX_XXXX_XXXXXXXXX" +
@@ -75,22 +135,26 @@ public class Cluedo {
 
         for (int i = 0; layout.charAt(i) != 'E'; i++) {
             if (layout.charAt(i) == 'X') {
-                board.getBoard()[i / 24][i % 24].setAccessible();
-                board.getBoard()[i / 24][i % 24].setPrintable("X");
+                board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setAccessible();
+                board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setPrintable("X");
             } else {
                 for (Room r : rooms) {
                     if (layout.charAt(i) == r.getPrintable().charAt(0)) {
-                        r.addTile(board.getBoard()[i / 24][i % 24]);
+                        r.addTile(board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH]);
                     }
                 }
             }
         }
 
+        // adds the rooms to the tiles
         for (Room r : rooms){
             r.setPrintable();
         }
     }
 
-    public static void main(String[] args) { new Cluedo(); }
+    public static void main(String[] args) {
+        Cluedo game = new Cluedo();
+        game.run();
+    }
 
 }

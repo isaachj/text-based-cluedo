@@ -8,7 +8,7 @@ public class Tile {
     private Room room;
     private String printable = " ";
     private boolean accessible = true;
-    private Object contains = null;
+    private Player contains = null;
 
     Tile (int row, int col){
         this.row = row;
@@ -27,13 +27,20 @@ public class Tile {
         return room;
     }
 
+    public void setContains(Player contains) {
+        this.contains = contains;
+    }
+
     public void setRoom(Room room) { this.room = room; }
 
     public boolean isAccessible() { return accessible; }
 
     public void setAccessible() { accessible = !accessible; }
 
-    public String getPrintable(){ return printable; }
+    public String getPrintable(){
+        if (contains != null) { return contains.getPrintable(); }
+        return printable;
+    }
 
     public void setPrintable(String printable) {
         this.printable = printable;
