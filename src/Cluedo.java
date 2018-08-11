@@ -15,6 +15,9 @@ public class Cluedo {
 
     public void redraw(){ board.draw(); }
 
+    /**
+     * Fills the board array with empty tiles
+     */
     public void setUpBoard(){
         for (int i = 0; i < board.getBoard().length; i++){
             for (int j = 0; j < board.getBoard()[1].length; j++){

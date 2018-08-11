@@ -28,6 +28,10 @@ public class Room {
 
     public String getPrintable(){ return printable; }
 
+    /**
+     * Sets the character for each tile to be drawn as
+     * also associates each tile with the room
+     */
     void setPrintable(){
         for (Tile t : tiles){
             t.setRoom(this);
