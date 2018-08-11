@@ -15,6 +15,9 @@ class Suggestion {
         return weapon.equals(c) || room.equals(c) || character.equals(c);
     }
 
+    1 -> 1 WeaponCard;
+    1 -> 1 CharacterCard;
+    1 -> 1 RoomCard;
 
 }
 
@@ -45,6 +48,8 @@ class WeaponCard {
 
 class CharacterCard {
     isA Card;
+    int startX;
+    int startY;
 
     String getPrintable() {
         return "\nCharacter: " + this.getName();
@@ -72,3 +77,110 @@ class RoomCard {
         return false;
     }
 }
+
+class Board {
+    String getPrintable();
+    1 -> 676 Tile;
+    Tile[] board;
+}
+
+class Tile {
+    String getPrintable();
+    1 -- 0..* Room;
+}
+
+class Room {
+    String getPrintable();
+    1 -> 1 RoomCard;
+}
+
+class Cluedo {
+    depend java.util.List;
+    Card[] deck;
+    Suggestion murder;
+    Player[] players;
+    List<> roomGroup;
+
+    void redraw();
+    void setUpBoard();
+    void setUpRooms();
+    void parseLayout();
+    void run();
+
+    1 -> 1 Board;
+    1 -> * Room;
+    1 -> 1 Suggestion;
+    1 -> * RoomCard;
+    1 -> * CharacterCard;
+    1 -> * WeaponCard;
+}
+
+class Player {
+    String name;
+    Tile position;
+
+    String getPrintable();
+    void move();
+
+    1 -- 1 Tile;
+    1 -> * RoomCard;
+    1 -> * CharacterCard;
+    1 -> * WeaponCard;
+}
+
+class Suggestion
+{
+  position 301 11 215 189;
+}
+
+class Card
+{
+  position 2 75 189 127;
+}
+
+class WeaponCard
+{
+  position 1 306 189 95;
+}
+
+class CharacterCard
+{
+  position 127 709 189 129;
+}
+
+class RoomCard
+{
+  position 319 589 189 95;
+}
+
+class Board
+{
+  position 780 37 109 78;
+  position.association Board__Tile 105,78 6,0;
+}
+
+class Tile
+{
+  position 886 443 109 61;
+  position.association Room__Tile 53,0 37,61;
+}
+
+class Room
+{
+  position 862 240 109 61;
+}
+
+class Cluedo
+{
+  position 538 16 158 129;
+  position.association Cluedo__Room 134,109 2,0;
+  position.association Board__Cluedo 158,3 0,0;
+  position.association Cluedo__Suggestion 0,10 233,11;
+}
+
+class Player
+{
+  position 710 755 112 78;
+  position.association CharacterCard__Player 0,45 189,36;
+  position.association Player__RoomCard 0,45 189,54;
+}//$?[End_of_model]$?
