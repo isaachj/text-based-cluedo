@@ -125,4 +125,11 @@ public class Player {
     public void setPrintable(String printable){
         this.printable = printable;
     }
+
+    /**
+     * @return the location of the player
+     */
+    public Tile getLocation() {
+        return location;
+    }
 }

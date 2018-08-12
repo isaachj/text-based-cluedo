@@ -13,6 +13,7 @@ public class Cluedo {
     private int numPlayers;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Card> deck = new ArrayList<>();
+    ArrayList<Card> tempDeck;
 
     private Cluedo(){ setUpBoard(); }
 
@@ -20,6 +21,8 @@ public class Cluedo {
      * game logic
      */
     private void run(){
+
+        // Setup
         Scanner in = new Scanner(System.in);
         do {
             System.out.print("Please enter the number of players(3 - 6): ");
@@ -44,10 +47,12 @@ public class Cluedo {
             p.setPrintable(String.valueOf(players.indexOf(p) + 1));
         }
 
+        tempDeck = deck;
         // generate murder
         Suggestion murder = generateMurder();
 
         // distribute cards
+        dealCards(numPlayers);
 
         // game logic
         int count = 0;
@@ -73,7 +78,7 @@ public class Cluedo {
     /**
      * @param p - The player
      * @param in - The scanner (for getting input)
-     * @return
+     * @return if the game is over
      */
     private boolean doTurn(Player p, Scanner in) {
 
@@ -84,16 +89,20 @@ public class Cluedo {
 
         while (moves != 0) {
 
-            System.out.println("Enter direction to move: (WASD)");
+            System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand");
             String dir = in.nextLine();
 
-            if (p.parseInput(dir)){
+            if ( dir.toUpperCase().equals("H") ){
+
+                p.printHand(); // for testing dealing
+
+            } else if(p.parseInput(dir)){
 
                 redraw();
                 moves--;
                 System.out.println("You have " + moves + " moves left");
 
-            }else {
+            } else {
 
                 redraw();
 
@@ -150,32 +159,31 @@ public class Cluedo {
      * 'E' represents the end of the string
      */
     public void parseLayout(){
-        String layout =
-                "XXXXXXXXX_XXXX_XXXXXXXXX" +
-                "XXXXXXX___XXXX___XXXXXXX" +
-                "XKKKKX__XXXBBXXX__XCCCCX" +
-                "XKKKKX__XBBBBBBX__XCCCCX" +
-                "XKKKKX__XBBBBBBX__CCCCCX" +
-                "XXKKKX__BBBBBBBB___XXXXX" +
-                "XXXXKX__XBBBBBBX________" +
-                "________XBXXXXBX_______X" +
-                "X_________________XXXXXX" +
-                "XXXXX_____________IIIIIX" +
-                "XDDDXXXX__XXXXX___XIIIIX" +
-                "XDDDDDDX__XXXXX___XIIIIX" +
-                "XDDDDDDD__XXXXX___XXXXIX" +
-                "XDDDDDDX__XXXXX________X" +
-                "XDDDDDDX__XXXXX___XXLXXX" +
-                "XXXXXXDX__XXXXX__XXLLLLX" +
-                "X_________XXXXX__LLLLLLX" +
-                "_________________XXLLLLX" +
-                "X________XXHHXX___XXXXXX" +
-                "XXXXXOX__XHHHHX_________" +
-                "XOOOOOX__XHHHHH________X" +
-                "XOOOOOX__XHHHHX__XSXXXXX" +
-                "XOOOOOX__XHHHHX__XSSSSSX" +
-                "XOOOOOX__XHHHHX__XSSSSSX" +
-                "XXXXXXX_XXXXXXXX_XXXXXXXE";
+        String layout = "XXXXXXXXX_XXXX_XXXXXXXXX" +
+                        "XXXXXXX___XXXX___XXXXXXX" +
+                        "XKKKKX__XXXBBXXX__XCCCCX" +
+                        "XKKKKX__XBBBBBBX__XCCCCX" +
+                        "XKKKKX__XBBBBBBX__CCCCCX" +
+                        "XXKKKX__BBBBBBBB___XXXXX" +
+                        "XXXXKX__XBBBBBBX________" +
+                        "________XBXXXXBX_______X" +
+                        "X_________________XXXXXX" +
+                        "XXXXX_____________IIIIIX" +
+                        "XDDDXXXX__XXXXX___XIIIIX" +
+                        "XDDDDDDX__XXXXX___XIIIIX" +
+                        "XDDDDDDD__XXXXX___XXXXIX" +
+                        "XDDDDDDX__XXXXX________X" +
+                        "XDDDDDDX__XXXXX___XXLXXX" +
+                        "XXXXXXDX__XXXXX__XXLLLLX" +
+                        "X_________XXXXX__LLLLLLX" +
+                        "_________________XXLLLLX" +
+                        "X________XXHHXX___XXXXXX" +
+                        "XXXXXOX__XHHHHX_________" +
+                        "XOOOOOX__XHHHHH________X" +
+                        "XOOOOOX__XHHHHX__XSXXXXX" +
+                        "XOOOOOX__XHHHHX__XSSSSSX" +
+                        "XOOOOOX__XHHHHX__XSSSSSX" +
+                        "XXXXXXX_XXXXXXXX_XXXXXXXE";
 
         for (int i = 0; layout.charAt(i) != 'E'; i++) {
             if (layout.charAt(i) == 'X') {
@@ -238,28 +246,95 @@ public class Cluedo {
         RoomCard murderRoom;
         CharacterCard murderEr;
 
-        int i = (int) (Math.random() * deck.size());
-        while (!(deck.get(i) instanceof  WeaponCard)) {
-            i = (int) (Math.random() * deck.size());
+        int i = (int) (Math.random() * tempDeck.size());
+        while (!(tempDeck.get(i) instanceof  WeaponCard)) {
+            i = (int) (Math.random() * tempDeck.size());
         }
-        murderWeapon = (WeaponCard) deck.get(i);
-        deck.remove(murderWeapon);
+        murderWeapon = (WeaponCard) tempDeck.get(i);
+        tempDeck.remove(murderWeapon);
 
-        i = (int) (Math.random() * deck.size());
-        while (!(deck.get(i) instanceof  RoomCard)) {
-            i = (int) (Math.random() * deck.size());
+        i = (int) (Math.random() * tempDeck.size());
+        while (!(tempDeck.get(i) instanceof  RoomCard)) {
+            i = (int) (Math.random() * tempDeck.size());
         }
-        murderRoom = (RoomCard) deck.get(i);
-        deck.remove(murderRoom);
+        murderRoom = (RoomCard) tempDeck.get(i);
+        tempDeck.remove(murderRoom);
 
-        i = (int) (Math.random() * deck.size());
-        while (!(deck.get(i) instanceof  CharacterCard)) {
-            i = (int) (Math.random() * deck.size());
+        i = (int) (Math.random() * tempDeck.size());
+        while (!(tempDeck.get(i) instanceof  CharacterCard)) {
+            i = (int) (Math.random() * tempDeck.size());
         }
-        murderEr = (CharacterCard) deck.get(i);
-        deck.remove(murderEr);
+        murderEr = (CharacterCard) tempDeck.get(i);
+        tempDeck.remove(murderEr);
 
         return new Suggestion(murderWeapon, murderRoom, murderEr);
+    }
+
+    /**
+     * Deals every card in the deck to a player
+     * @param numPlayers the current number of players
+     */
+    private void dealCards(int numPlayers){
+        int i = 0;
+        while (!tempDeck.isEmpty()){
+            Card c = tempDeck.get((int) (Math.random() * tempDeck.size()));
+            players.get(i).addToHand(c);
+            tempDeck.remove(c);
+            i++;
+            if (i == numPlayers) { i = 0; }
+        }
+    }
+
+    /**
+     * Allows the player to create a suggestion
+     * TODO: account for object locations
+     * @param player the player making the suggestion
+     * @param in the scanner to take input
+     * @return the created suggestion
+     */
+    private Suggestion suggest(Player player, Scanner in){
+        Card roomCard = null;
+        Card weaponCard = null;
+        Card charCard = null;
+
+
+        int i = 0;
+        System.out.println("Pick 1 card of each type to make a suggestion");
+        for(Card c : deck) {
+
+            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")\n");
+            i++;
+        }
+
+        System.out.println("Pick 1 room card: ");
+        while (!(roomCard instanceof RoomCard)) {
+            try {
+                roomCard = deck.get(Integer.parseInt(in.nextLine()));
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid Format!");
+            }
+        }
+
+        System.out.println("Pick 1 weapon card: ");
+        while (!(weaponCard instanceof WeaponCard)) {
+            try {
+                weaponCard = deck.get(Integer.parseInt(in.nextLine()));
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid Format!");
+            }
+        }
+
+        System.out.println("Pick 1 character card: ");
+        while (!(charCard instanceof CharacterCard)) {
+            try {
+                charCard = deck.get(Integer.parseInt(in.nextLine()));
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid Format!");
+            }
+        }
+
+        return new Suggestion((WeaponCard) weaponCard, (RoomCard) roomCard, (CharacterCard) charCard);
+
     }
 
     /**
