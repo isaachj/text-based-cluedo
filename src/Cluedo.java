@@ -47,7 +47,7 @@ public class Cluedo {
             p.setPrintable(String.valueOf(players.indexOf(p) + 1));
         }
 
-        tempDeck = deck;
+        tempDeck.addAll(deck);
         // generate murder
         Suggestion murder = generateMurder();
 
@@ -83,33 +83,83 @@ public class Cluedo {
     private boolean doTurn(Player p, Scanner in) {
 
         System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn");
+        boolean moving = true;
+        Room startingRoom = p.getLocation().getRoom();
+        boolean suggesting = false;
 
-        int moves = roll(); // Find out how many moves the player will have
-        System.out.println("You rolled: " + moves);
+        if(p.getJustMoved()) {
+            System.out.println("You can choose to move or make a suggestion.");
+            System.out.println("Do you want to move? (Y/N)");
 
-        while (moves != 0) {
+            String ans = in.nextLine().toUpperCase();
+            if(ans.equals("N")) {
+                moving = false;
+            }
+        }
 
-            System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand");
-            String dir = in.nextLine();
+        if(moving) { // If the player has decided to move
+            int moves = roll(); // Find out how many moves the player will have
+            System.out.println("You rolled: " + moves);
 
-            if ( dir.toUpperCase().equals("H") ){
+            while (moves != 0) {
 
-                p.printHand(); // for testing dealing
+                System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand or 'G' to make a guess (suggestion) at the murder circumstances");
+                String dir = in.nextLine();
 
-            } else if(p.parseInput(dir)){
+                if (dir.toUpperCase().equals("H")) {
 
-                redraw();
-                moves--;
-                System.out.println("You have " + moves + " moves left");
+                    p.printHand(); // for testing dealing
 
-            } else {
+                } else if(dir.toUpperCase().equals("T")) {
+                    Room currentRoom = p.getLocation().getRoom();
+                    if(currentRoom != null && !currentRoom.equals(startingRoom)) {
+                        suggesting = true;
+                        moves = 0;
+                        redraw();
+                    } else {
+                        System.out.println("Cannot make a suggestion from this room.");
+                    }
+                } else if (p.parseInput(dir)) {
 
-                redraw();
+                    redraw();
+                    moves--;
+                    System.out.println("You have " + moves + " moves left");
 
+                } else {
+
+                    redraw();
+
+                }
+
+            }
+
+            // Work out of the player wants to suggest
+            if(!suggesting && p.getLocation().getRoom() != null && !p.getLocation().getRoom().equals(startingRoom)) {
+                System.out.println("Do you want to make a suggestion? (Y/N)");
+                String ans = in.nextLine().toUpperCase();
+                if(ans.equals("Y")) {
+                    suggesting = true;
+                }
+            }
+
+            if(suggesting) { // If the player has decided to make a suggestion
+                Suggestion s = suggest(p, in);
+                // todo: Initiate refuting of suggestion
+                boolean refuted = refuteSuggestion(s, in);
+
+                // todo: Move character in the suggestion into current room.
+                // todo: Ask player if they want to make an accusation.
+                // todo: Make accusation.
+                // todo: Check accusation against winner.
             }
 
         }
 
+        return false;
+    }
+
+    public boolean refuteSuggestion(Suggestion s, Scanner in) {
+        // todo: finish this function
         return false;
     }
 
@@ -300,12 +350,17 @@ public class Cluedo {
 
         int i = 0;
         System.out.println("Pick 1 card of each type to make a suggestion");
-        for(Card c : deck) {
-
+        for(Card c : deck) { // print the deck
             System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")\n");
             i++;
+
+            // Get the room card
+            if(c instanceof RoomCard && c.getName().equals(player.getLocation().getRoom().getName())) {
+                roomCard = c;
+            }
         }
 
+        /*
         System.out.println("Pick 1 room card: ");
         while (!(roomCard instanceof RoomCard)) {
             try {
@@ -314,6 +369,9 @@ public class Cluedo {
                 System.err.println("Invalid Format!");
             }
         }
+        */
+
+        System.out.println("The room is: " + player.getLocation().getRoom().getName());
 
         System.out.println("Pick 1 weapon card: ");
         while (!(weaponCard instanceof WeaponCard)) {
@@ -321,6 +379,7 @@ public class Cluedo {
                 weaponCard = deck.get(Integer.parseInt(in.nextLine()));
             } catch (NumberFormatException nfe) {
                 System.err.println("Invalid Format!");
+                return null;
             }
         }
 
@@ -330,10 +389,11 @@ public class Cluedo {
                 charCard = deck.get(Integer.parseInt(in.nextLine()));
             } catch (NumberFormatException nfe) {
                 System.err.println("Invalid Format!");
+                return null;
             }
         }
 
-        return new Suggestion((WeaponCard) weaponCard, (RoomCard) roomCard, (CharacterCard) charCard);
+        return new Suggestion(player, false, (WeaponCard) weaponCard, (RoomCard) roomCard, (CharacterCard) charCard); // Get the suggestion.
 
     }
 

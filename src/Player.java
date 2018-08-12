@@ -10,6 +10,8 @@ public class Player {
     private String name;
     private Board board;
     private ArrayList<Card> hand; // The cards in the player's hand
+    private CharacterCard card;
+    private boolean justMoved = false; // Whether or not the player has been moved by a suggestion.
 
     public Player(CharacterCard card, Board board){
         this.location = board.get(card.getStartRow(), card.getStartCol());
@@ -17,6 +19,7 @@ public class Player {
         this.board = board;
         name = card.getName();
         hand = new ArrayList<Card>();
+        this.card = card;
     }
 
     /**
@@ -92,7 +95,7 @@ public class Player {
     public void printHand() {
         int i = 0;
         for(Card c : hand) {
-            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")\n");
+            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
             i++;
         }
     }
@@ -108,10 +111,42 @@ public class Player {
     }
 
     /**
+     * Returns true if the card provided represents the player's character.
+     * @param c - The card to see if the player equals
+     * @return Whether or not c is the player
+     */
+    public boolean equals(Card c) {
+        return card.equals(c);
+    }
+
+    /**
+     * Returns true if the player provided is this player
+     * @param p - The player which is being compared
+     * @return Whether or not p is the player
+     */
+    public boolean equals(Player p) {
+        return p.getName().equals(name);
+    }
+
+    /**
      * @return The name of the player
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @param b - Whether or not the player has just been moved by another player making a suggestion.
+     */
+    public void setJustMoved(boolean b) {
+        justMoved = b;
+    }
+
+    /**
+     * @return Whether or not the player has just been moved by another player making a suggestion.
+     */
+    public boolean getJustMoved() {
+        return justMoved;
     }
 
     /**

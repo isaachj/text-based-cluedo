@@ -16,6 +16,13 @@ public class Room {
         this.printable = printable;
     }
 
+    public boolean equals(Room r) {
+        if(r != null && name.equals(r.getName())) {
+            return true;
+        }
+        return false;
+    }
+
     public String getName() {
         return name;
     }
