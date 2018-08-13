@@ -12,6 +12,7 @@ public class Player {
     private ArrayList<Card> hand; // The cards in the player's hand
     private CharacterCard card;
     private boolean justMoved = false; // Whether or not the player has been moved by a suggestion.
+    private boolean hasLost = false;
 
     public Player(CharacterCard card, Board board){
         this.location = board.get(card.getStartRow(), card.getStartCol());
@@ -109,6 +110,13 @@ public class Player {
         location = t;
         location.setContains(this);
     }
+
+    /**
+     * @return whether or not the player has lost.
+     */
+    public boolean hasLost() {return hasLost;}
+
+    public void lose() {hasLost = true;}
 
     /**
      * Returns true if the card provided represents the player's character.

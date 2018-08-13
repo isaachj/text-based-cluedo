@@ -31,6 +31,10 @@ public class Tile {
         this.contains = contains;
     }
 
+    public Player getContains() {
+        return contains;
+    }
+
     public void setRoom(Room room) { this.room = room; }
 
     public boolean isAccessible() { return accessible; }

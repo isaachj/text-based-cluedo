@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -15,6 +16,7 @@ public class Cluedo {
     private ArrayList<Card> deck = new ArrayList<>();
     private ArrayList<Card> tempDeck = new ArrayList<>();
     private ArrayList<Suggestion> accusations = new ArrayList<>();
+    private Suggestion murder;
 
     private Cluedo(){ setUpBoard(); }
 
@@ -50,14 +52,13 @@ public class Cluedo {
 
         tempDeck.addAll(deck);
         // generate murder
-        Suggestion murder = generateMurder();
+        murder = generateMurder();
 
         // distribute cards
         dealCards(numPlayers);
 
         // game logic
         int count = 0;
-        redraw();
         boolean gameWon = false;
         while (!gameWon){
             for (Player p : players) {
@@ -65,9 +66,12 @@ public class Cluedo {
                 // Do the player's turn.
                 gameWon = doTurn(p, in);
 
-            }
+                if(gameWon) { // Tell the player that they won.
+                    System.out.println("Congratulations " + p.getName() + " you won!");
+                    System.out.println("The murder circumstances:\n It was " + murder.getCharacter().getName() + " in the " + murder.getRoom().getName() + " with the " + murder.getWeapon().getName() + ".");
+                }
 
-            redraw();
+            }
 
             if (count == 20) { break; }
 
@@ -79,7 +83,7 @@ public class Cluedo {
     /**
      * @param p - The player
      * @param in - The scanner (for getting input)
-     * @return if the game is over
+     * @return true if the game is over
      */
     private boolean doTurn(Player p, Scanner in) {
 
@@ -89,95 +93,167 @@ public class Cluedo {
         boolean suggesting = false;
 
         if(p.getJustMoved()) {
+            p.setJustMoved(false);
             System.out.println("You can choose to move or make a suggestion.");
             System.out.println("Do you want to move? (Y/N)");
 
             String ans = in.nextLine().toUpperCase();
             if(ans.equals("N")) {
                 moving = false;
+                suggesting = true;
             }
         }
 
         if(moving) { // If the player has decided to move
+
+            redraw();
+
             int moves = roll(); // Find out how many moves the player will have
             System.out.println("You rolled: " + moves);
 
             while (moves != 0) {
 
-                System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand or 'T' to make a guess (suggestion) at the murder circumstances");
+                System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand or 'G' to make a guess (suggestion) at the murder circumstances");
                 String dir = in.nextLine();
 
                 if (dir.toUpperCase().equals("H")) {
 
                     p.printHand(); // for testing dealing
 
-                } else if(dir.toUpperCase().equals("T")) {
+                } else if (dir.toUpperCase().equals("G")) {
                     Room currentRoom = p.getLocation().getRoom();
-                    if(currentRoom != null && !currentRoom.equals(startingRoom)) {
+                    if (currentRoom != null && !currentRoom.equals(startingRoom)) {
                         suggesting = true;
                         moves = 0;
-                        redraw();
                     } else {
                         System.out.println("Cannot make a suggestion from this room.");
                     }
                 } else if (p.parseInput(dir)) {
 
-                    redraw();
                     moves--;
                     System.out.println("You have " + moves + " moves left");
 
-                } else {
-
-                    redraw();
-
                 }
 
+                redraw();
+
             }
+        }
 
-            // Work out of the player wants to suggest
-            if(!suggesting && p.getLocation().getRoom() != null && !p.getLocation().getRoom().equals(startingRoom)) {
-                System.out.println("Do you want to make a suggestion? (Y/N)");
-                String ans = in.nextLine().toUpperCase();
-                if(ans.equals("Y")) {
-                    suggesting = true;
-                }
+        // Work out of the player wants to suggest
+        if(!suggesting && p.getLocation().getRoom() != null && !p.getLocation().getRoom().equals(startingRoom)) {
+            System.out.println("Do you want to make a suggestion? (Y/N)");
+            String ans = in.nextLine().toUpperCase();
+            if(ans.equals("Y")) {
+                suggesting = true;
             }
+        }
 
-            if(suggesting) { // If the player has decided to make a suggestion
-                Suggestion s = suggest(p, in);
-                // Initiate refuting of suggestion
-                boolean refuted = refuteSuggestion(s, in);
+        if(suggesting) { // If the player has decided to make a suggestion
+            System.out.println("Your hand for reference: ");
+            p.printHand();
+            System.out.println(" ");
+            Suggestion s = suggest(p, in);
 
-                // move suggested character to a random tile in the suggested room
-                for (Player pl : players){
-                    assert s != null;
-                    if (pl.getName().equals(s.getCharacter().getName())){
-                        for (Room r : rooms){
-                            if (r.getName().equals(s.getRoom().getName())){
-                                pl.moveTo(r.getTiles().get((int) (Math.random() * r.getTiles().size())));
-                            }
+            if(s == null) {
+                return false;
+            }
+            // Initiate refuting of suggestion
+            boolean refuted = refuteSuggestion(s, in);
+
+            // move suggested character to a random tile in the suggested room
+            for (Player pl : players){
+                //assert s != null;
+                if (s != null && pl.getName().equals(s.getCharacter().getName())){
+                    for (Room r : rooms){
+                        if (r.getName().equals(s.getRoom().getName())){
+                            Tile movingTo = r.getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+                            pl.moveTo(movingTo);
+                            pl.setJustMoved(true);
                         }
                     }
                 }
-
-                // if the suggestion cannot be refuted add it as a possible accusation
-                if (!refuted){
-                    assert s != null;
-                    s.setIsAccusation(true);
-                    accusations.add(s);
-                }
-
-                // check that there are possible accusations before accusing
-                if (!accusations.isEmpty()) {
-                    // todo: Ask player if they want to make an accusation.
-                    // todo: Make accusation.
-                    // todo: Check accusation against winner.
-                }
             }
 
+            // if the suggestion cannot be refuted add it as a possible accusation
+            if (!refuted){
+                assert s != null;
+                s.setIsAccusation(true);
+                accusations.add(s);
+            }
+
+            // check that there are possible accusations before accusing
+            if (!accusations.isEmpty()) {
+                System.out.println("Do you want to make an accusation? (Y/N");
+                String ans = in.nextLine().toUpperCase();
+                if(ans.equals("Y")) {
+                    Suggestion accuse = getAccusation(p, in);
+
+                    if(accuse.equals(murder)) {
+                        System.out.println("Congratulations!");
+                        return true;
+                    } else {
+                        System.out.println("Sorry! You're out!");
+                        p.lose();
+                    }
+                }
+            }
         }
 
         return false;
+    }
+
+    /**
+     * Allows the player to create a suggestion
+     * @param player the player making the suggestion
+     * @param in the scanner to take input
+     * @return the created suggestion
+     */
+    private Suggestion getAccusation(Player player, Scanner in){
+        Card roomCard = null;
+        Card weaponCard = null;
+        Card charCard = null;
+
+
+        int i = 0;
+        System.out.println("Pick 1 card of each type to make a suggestion");
+        for(Card c : deck) { // print the deck
+            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
+            i++;
+        }
+
+        System.out.println("Pick 1 room card: ");
+        while (!(roomCard instanceof RoomCard)) {
+            try {
+                roomCard = deck.get(Integer.parseInt(in.nextLine()));
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid Format!");
+                return null;
+            }
+        }
+
+        System.out.println("Pick 1 weapon card: ");
+        while (!(weaponCard instanceof WeaponCard)) {
+            try {
+                weaponCard = deck.get(Integer.parseInt(in.nextLine()));
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid Format.");
+                return null;
+            }
+        }
+
+        System.out.println("Pick 1 character card: ");
+        while (!(charCard instanceof CharacterCard)) {
+            try {
+                charCard = deck.get(Integer.parseInt(in.nextLine()));
+            } catch (NumberFormatException nfe) {
+                System.err.println("Invalid Format.");
+                return null;
+            }
+        }
+
+        return new Suggestion(player, true, (WeaponCard) weaponCard, (RoomCard) roomCard, (CharacterCard) charCard); // Get the accusation.
+
     }
 
     /**
@@ -189,22 +265,51 @@ public class Cluedo {
     public boolean refuteSuggestion(Suggestion s, Scanner in) {
 
         for (Player p : players){
+            if(p.equals(s.getSuggestor())) {
+                continue;
+            }
 
-            System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn to refute");
-            p.printHand();
-            System.out.println("X : pass");
+            boolean canRefute = false;
+            ArrayList<Card> refutable = new ArrayList<>();
 
-            String input = in.nextLine();
+            for(Card c : p.getHand()) {
+                if(s.contains(c)) {
+                    canRefute = true;
+                    refutable.add(c);
+                }
+            }
 
-            if (!input.toUpperCase().equals("X")){
-                Card c = p.getHand().get(Integer.parseInt(input));
-                if (c.equals(s.getCharacter()) || c.equals(s.getRoom()) || c.equals(s.getWeapon())){
+            if(refutable.size() > 0) {
+                System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn to refute");
+                printCardList(refutable);
+                System.out.println("The card you wish to refute with: ");
+
+                String input = in.nextLine();
+
+                Card c = refutable.get(Integer.parseInt(input));
+
+                if (s.contains(c)) {
                     return true;
                 }
+
+            } else {
+                System.out.println(p.getName() + " cannot refute.");
             }
         }
 
         return false;
+    }
+
+    /**
+     * Print the provided cards in a list
+     * @param l - the list
+     */
+    public void printCardList(List<Card> l) {
+        int i = 0;
+        for(Card c : l) {
+            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
+            i++;
+        }
     }
 
     public void redraw(){
