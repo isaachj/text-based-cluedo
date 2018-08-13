@@ -167,4 +167,8 @@ public class Player {
     public Tile getLocation() {
         return location;
     }
+
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
 }

@@ -13,7 +13,8 @@ public class Cluedo {
     private int numPlayers;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Card> deck = new ArrayList<>();
-    ArrayList<Card> tempDeck;
+    private ArrayList<Card> tempDeck = new ArrayList<>();
+    private ArrayList<Suggestion> accusations = new ArrayList<>();
 
     private Cluedo(){ setUpBoard(); }
 
@@ -103,7 +104,7 @@ public class Cluedo {
 
             while (moves != 0) {
 
-                System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand or 'G' to make a guess (suggestion) at the murder circumstances");
+                System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand or 'T' to make a guess (suggestion) at the murder circumstances");
                 String dir = in.nextLine();
 
                 if (dir.toUpperCase().equals("H")) {
@@ -144,13 +145,34 @@ public class Cluedo {
 
             if(suggesting) { // If the player has decided to make a suggestion
                 Suggestion s = suggest(p, in);
-                // todo: Initiate refuting of suggestion
+                // Initiate refuting of suggestion
                 boolean refuted = refuteSuggestion(s, in);
 
-                // todo: Move character in the suggestion into current room.
-                // todo: Ask player if they want to make an accusation.
-                // todo: Make accusation.
-                // todo: Check accusation against winner.
+                // move suggested character to a random tile in the suggested room
+                for (Player pl : players){
+                    assert s != null;
+                    if (pl.getName().equals(s.getCharacter().getName())){
+                        for (Room r : rooms){
+                            if (r.getName().equals(s.getRoom().getName())){
+                                pl.moveTo(r.getTiles().get((int) (Math.random() * r.getTiles().size())));
+                            }
+                        }
+                    }
+                }
+
+                // if the suggestion cannot be refuted add it as a possible accusation
+                if (!refuted){
+                    assert s != null;
+                    s.setIsAccusation(true);
+                    accusations.add(s);
+                }
+
+                // check that there are possible accusations before accusing
+                if (!accusations.isEmpty()) {
+                    // todo: Ask player if they want to make an accusation.
+                    // todo: Make accusation.
+                    // todo: Check accusation against winner.
+                }
             }
 
         }
@@ -158,8 +180,30 @@ public class Cluedo {
         return false;
     }
 
+    /**
+     * Allows players to refute suggestions
+     * @param s the suggestion to be refuted
+     * @param in scanner to parse inputs
+     * @return true if the suggestion has been refuted
+     */
     public boolean refuteSuggestion(Suggestion s, Scanner in) {
-        // todo: finish this function
+
+        for (Player p : players){
+
+            System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn to refute");
+            p.printHand();
+            System.out.println("X : pass");
+
+            String input = in.nextLine();
+
+            if (!input.toUpperCase().equals("X")){
+                Card c = p.getHand().get(Integer.parseInt(input));
+                if (c.equals(s.getCharacter()) || c.equals(s.getRoom()) || c.equals(s.getWeapon())){
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
@@ -337,7 +381,6 @@ public class Cluedo {
 
     /**
      * Allows the player to create a suggestion
-     * TODO: account for object locations
      * @param player the player making the suggestion
      * @param in the scanner to take input
      * @return the created suggestion
@@ -351,7 +394,7 @@ public class Cluedo {
         int i = 0;
         System.out.println("Pick 1 card of each type to make a suggestion");
         for(Card c : deck) { // print the deck
-            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")\n");
+            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
             i++;
 
             // Get the room card
@@ -359,17 +402,6 @@ public class Cluedo {
                 roomCard = c;
             }
         }
-
-        /*
-        System.out.println("Pick 1 room card: ");
-        while (!(roomCard instanceof RoomCard)) {
-            try {
-                roomCard = deck.get(Integer.parseInt(in.nextLine()));
-            } catch (NumberFormatException nfe) {
-                System.err.println("Invalid Format!");
-            }
-        }
-        */
 
         System.out.println("The room is: " + player.getLocation().getRoom().getName());
 
