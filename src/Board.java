@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 /**
  * represents the game board
@@ -46,5 +47,15 @@ public class Board {
 
             }
         }
+    }
+
+	/**
+	 * @param e - The mouse click event.
+	 * @return Whether or not the mouse click happened on top of the board.
+	 */
+    public boolean isMouseOn(MouseEvent e) {
+    	int x = e.getX();
+    	int y = e.getY();
+        return x >= 0 && y >= 0 && x < board[0].length*Tile.width && y < board.length*Tile.width;
     }
 }

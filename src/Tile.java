@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 /**
  * Represents a square on the game board
@@ -7,7 +8,7 @@ import java.awt.*;
 
 public class Tile {
 
-    private final int width = 20;
+    public static int width = 20;
     private int row, col;
     private Room room;
     private String printable = " ";
@@ -67,5 +68,15 @@ public class Tile {
             g.setColor(contains.c);
             g.fillOval(col * width + 2, row * width + 2, width - 4, width - 4);
         }
+    }
+
+	/**
+	 * @param e - The mouse click event.
+	 * @return Whether or not the mouse click happened on top of this tile.
+	 */
+	public boolean isMouseOn(MouseEvent e) {
+    	int x = e.getX();
+    	int y = e.getY();
+    	return x >= width*col && y >= width*row && x < width*(col+1) && y < width*(row+1);
     }
 }
