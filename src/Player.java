@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * represents a player
  */
-public class Player {
+public class Player extends Movable {
 
     private Tile location;
     //private String printable = "P";
@@ -14,9 +14,9 @@ public class Player {
     private CharacterCard card;
     private boolean justMoved = false; // Whether or not the player has been moved by a suggestion.
     private boolean hasLost = false;
-    Color c;
 
     public Player(CharacterCard card, Board board, Color c){
+    	super(c, "");
         this.location = board.get(card.getStartRow(), card.getStartCol());
         this.location.setContains(this);
         this.board = board;
