@@ -10,8 +10,8 @@ public abstract class GUI {
 	// Methods which must be implemented
 	public abstract void resetGame();
 	public abstract void redraw(Graphics g);
-	//public abstract void onMove(Move m); todo: pick these to implement
-	//public abstract void onClick(MouseEvent e);
+	//public abstract void onMove(Move m); todo: implement
+	public abstract void onClick(MouseEvent e);
 
 	public enum Move {
 		NORTH, SOUTH, EAST, WEST
@@ -167,7 +167,7 @@ public abstract class GUI {
 
 		drawing.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				//onClick(e); todo: implement this
+				onClick(e);
 				redraw();
 			}
 		});
