@@ -31,17 +31,14 @@ public class Cluedo extends GUI {
 
         // Setup
         Scanner in = new Scanner(System.in);
-        do {
-            /*getTextOutputArea().replaceRange("Please enter the number of players(3 - 6): \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
-            try {
-                numPlayers = Integer.parseInt(in.nextLine());
-            } catch (NumberFormatException nfe) {
-                System.err.println("Invalid Format!");
-            }
 
-            String output = "You entered : " + numPlayers + "\n";
-            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());*/
-        } while (numPlayers > 6 || numPlayers < 3);
+        while(numPlayers == 0) {
+            try {
+                Thread.sleep(1);
+            } catch(InterruptedException e) {}
+        }
+
+        // setup players
 
         // setup players
         players.add(new Player(new CharacterCard("Mrs White", 0, 9), board, Color.gray));
