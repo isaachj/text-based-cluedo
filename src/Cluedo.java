@@ -31,14 +31,15 @@ public class Cluedo extends GUI {
         // Setup
         Scanner in = new Scanner(System.in);
         do {
-            System.out.print("Please enter the number of players(3 - 6): ");
+            getTextOutputArea().replaceRange("Please enter the number of players(3 - 6): \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             try {
                 numPlayers = Integer.parseInt(in.nextLine());
             } catch (NumberFormatException nfe) {
                 System.err.println("Invalid Format!");
             }
 
-            System.out.println("You entered : " + numPlayers);
+            String output = "You entered : " + numPlayers + "\n";
+            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         } while (numPlayers > 6 || numPlayers < 3);
 
         // setup players
@@ -70,8 +71,9 @@ public class Cluedo extends GUI {
                 gameWon = doTurn(p, in);
 
                 if(gameWon) { // Tell the player that they won.
-                    System.out.println("Congratulations " + p.getName() + " you won!");
-                    System.out.println("The murder circumstances:\n It was " + murder.getCharacter().getName() + " in the " + murder.getRoom().getName() + " with the " + murder.getWeapon().getName() + ".");
+                    String output = "Congratulations " + p.getName() + " you won!\n" +
+                            "The murder circumstances:\n It was " + murder.getCharacter().getName() + " in the " + murder.getRoom().getName() + " with the " + murder.getWeapon().getName() + ".\n";
+                    getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
                 }
 
             }
@@ -90,15 +92,16 @@ public class Cluedo extends GUI {
      */
     private boolean doTurn(Player p, Scanner in) {
 
-        System.out.println("It is " + p.getName() + "'s (Player " + String.valueOf(players.indexOf(p) + 1) + ") turn");
+        String output = "It is " + p.getName() + "'s (Player " + String.valueOf(players.indexOf(p) + 1) + ") turn\n";
+        getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         boolean moving = true;
         Room startingRoom = p.getLocation().getRoom();
         boolean suggesting = false;
 
         if(p.getJustMoved()) {
             p.setJustMoved(false);
-            System.out.println("You can choose to move or make a suggestion.");
-            System.out.println("Do you want to move? (Y/N)");
+            getTextOutputArea().replaceRange("You can choose to move or make a suggestion.\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
+            getTextOutputArea().replaceRange("Do you want to move? (Y/N)\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
 
             String ans = in.nextLine().toUpperCase();
             if(ans.equals("N")) {
@@ -112,16 +115,16 @@ public class Cluedo extends GUI {
             redraw();
 
             int moves = roll(); // Find out how many moves the player will have
-            System.out.println("You rolled: " + moves);
+            output = "You rolled: " + moves + "\n";
+            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
 
             while (moves != 0) {
-
-                System.out.println("Enter direction to move: (WASD) or press 'H' to view your hand or 'G' to make a guess (suggestion) at the murder circumstances");
+                getTextOutputArea().replaceRange("Enter direction to move: (WASD) or press 'H' to view your hand or 'G' to make a guess (suggestion) at the murder circumstances\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
                 String dir = in.nextLine();
 
                 if (dir.toUpperCase().equals("H")) {
 
-                    p.printHand(); // for testing dealing
+                    getTextOutputArea().replaceRange(p.printHand(), getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
 
                 } else if (dir.toUpperCase().equals("G")) {
                     Room currentRoom = p.getLocation().getRoom();
@@ -129,12 +132,14 @@ public class Cluedo extends GUI {
                         suggesting = true;
                         moves = 0;
                     } else {
-                        System.out.println("Cannot make a suggestion from this room.");
+                        System.out.println();
+                        getTextOutputArea().replaceRange("Cannot make a suggestion from this room.\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
                     }
                 } else if (p.parseInput(dir)) {
 
                     moves--;
-                    System.out.println("You have " + moves + " moves left");
+                    output = "You have " + moves + " moves left\n";
+                    getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
 
                 }
 
@@ -145,7 +150,7 @@ public class Cluedo extends GUI {
 
         // Work out of the player wants to suggest
         if(!suggesting && p.getLocation().getRoom() != null && !p.getLocation().getRoom().equals(startingRoom)) {
-            System.out.println("Do you want to make a suggestion? (Y/N)");
+            getTextOutputArea().replaceRange("Do you want to make a suggestion? (Y/N)\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             String ans = in.nextLine().toUpperCase();
             if(ans.equals("Y")) {
                 suggesting = true;
@@ -153,8 +158,9 @@ public class Cluedo extends GUI {
         }
 
         if(suggesting) { // If the player has decided to make a suggestion
-            System.out.println("Your hand for reference: ");
-            p.printHand();
+            getTextOutputArea().replaceRange("Your hand for reference: \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
+
+            getTextOutputArea().replaceRange(p.printHand(), getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             System.out.println(" ");
             Suggestion s = suggest(p, in);
 
@@ -187,16 +193,16 @@ public class Cluedo extends GUI {
 
             // check that there are possible accusations before accusing
             if (!accusations.isEmpty()) {
-                System.out.println("Do you want to make an accusation? (Y/N");
+                getTextOutputArea().replaceRange("Do you want to make an accusation? (Y/N)\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
                 String ans = in.nextLine().toUpperCase();
                 if(ans.equals("Y")) {
                     Suggestion accuse = getAccusation(p, in);
 
                     if(accuse.equals(murder)) {
-                        System.out.println("Congratulations!");
+                        getTextOutputArea().replaceRange("Congratulations!\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
                         return true;
                     } else {
-                        System.out.println("Sorry! You're out!");
+                        getTextOutputArea().replaceRange("Sorry! You're out!\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
                         p.lose();
                     }
                 }
@@ -219,13 +225,14 @@ public class Cluedo extends GUI {
 
 
         int i = 0;
-        System.out.println("Pick 1 card of each type to make a suggestion");
+        getTextOutputArea().replaceRange("Pick 1 card of each type to make a suggestion!\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         for(Card c : deck) { // print the deck
-            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
+            String output = i + ": " + c.getName() + " (" + c.getType() + ")\n";
+            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             i++;
         }
 
-        System.out.println("Pick 1 room card: ");
+        getTextOutputArea().replaceRange("Pick 1 room card: \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         while (!(roomCard instanceof RoomCard)) {
             try {
                 roomCard = deck.get(Integer.parseInt(in.nextLine()));
@@ -235,7 +242,7 @@ public class Cluedo extends GUI {
             }
         }
 
-        System.out.println("Pick 1 weapon card: ");
+        getTextOutputArea().replaceRange("Pick 1 weapon card: \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         while (!(weaponCard instanceof WeaponCard)) {
             try {
                 weaponCard = deck.get(Integer.parseInt(in.nextLine()));
@@ -245,7 +252,7 @@ public class Cluedo extends GUI {
             }
         }
 
-        System.out.println("Pick 1 character card: ");
+        getTextOutputArea().replaceRange("Pick 1 character card: \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         while (!(charCard instanceof CharacterCard)) {
             try {
                 charCard = deck.get(Integer.parseInt(in.nextLine()));
@@ -283,9 +290,10 @@ public class Cluedo extends GUI {
             }
 
             if(refutable.size() > 0) {
-                System.out.println("It is " + p.getName() + "'s (Player " + String.valueOf(players.indexOf(p) + 1) + ") turn to refute");
+                String output = "It is " + p.getName() + "'s (Player " + String.valueOf(players.indexOf(p) + 1) + ") turn to refute\n";
+                getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
                 printCardList(refutable);
-                System.out.println("The card you wish to refute with: ");
+                getTextOutputArea().replaceRange("The card you wish to refute with: \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
 
                 String input = in.nextLine();
 
@@ -296,7 +304,8 @@ public class Cluedo extends GUI {
                 }
 
             } else {
-                System.out.println(p.getName() + " cannot refute.");
+                String output = p.getName() + " cannot refute.\n";
+                getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             }
         }
 
@@ -310,7 +319,8 @@ public class Cluedo extends GUI {
     public void printCardList(List<Card> l) {
         int i = 0;
         for(Card c : l) {
-            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
+            String output = i + ": " + c.getName() + " (" + c.getType() + ")\n";
+            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             i++;
         }
     }
@@ -362,30 +372,30 @@ public class Cluedo extends GUI {
      */
     public void parseLayout(){
         String layout = "XXXXXXXXX_XXXX_XXXXXXXXX" +
-                        "XXXXXXX___XXXX___XXXXXXX" +
-                        "XKKKKX__XXXBBXXX__XCCCCX" +
-                        "XKKKKX__XBBBBBBX__XCCCCX" +
-                        "XKKKKX__XBBBBBBX__CCCCCX" +
-                        "XXKKKX__BBBBBBBB___XXXXX" +
-                        "XXXXKX__XBBBBBBX________" +
-                        "________XBXXXXBX_______X" +
-                        "X_________________XXXXXX" +
-                        "XXXXX_____________IIIIIX" +
-                        "XDDDXXXX__XXXXX___XIIIIX" +
-                        "XDDDDDDX__XXXXX___XIIIIX" +
-                        "XDDDDDDD__XXXXX___XXXXIX" +
-                        "XDDDDDDX__XXXXX________X" +
-                        "XDDDDDDX__XXXXX___XXLXXX" +
-                        "XXXXXXDX__XXXXX__XXLLLLX" +
-                        "X_________XXXXX__LLLLLLX" +
-                        "_________________XXLLLLX" +
-                        "X________XXHHXX___XXXXXX" +
-                        "XXXXXOX__XHHHHX_________" +
-                        "XOOOOOX__XHHHHH________X" +
-                        "XOOOOOX__XHHHHX__XSXXXXX" +
-                        "XOOOOOX__XHHHHX__XSSSSSX" +
-                        "XOOOOOX__XHHHHX__XSSSSSX" +
-                        "XXXXXXX_XXXXXXXX_XXXXXXXE";
+                "XXXXXXX___XXXX___XXXXXXX" +
+                "XKKKKX__XXXBBXXX__XCCCCX" +
+                "XKKKKX__XBBBBBBX__XCCCCX" +
+                "XKKKKX__XBBBBBBX__CCCCCX" +
+                "XXKKKX__BBBBBBBB___XXXXX" +
+                "XXXXKX__XBBBBBBX________" +
+                "________XBXXXXBX_______X" +
+                "X_________________XXXXXX" +
+                "XXXXX_____________IIIIIX" +
+                "XDDDXXXX__XXXXX___XIIIIX" +
+                "XDDDDDDX__XXXXX___XIIIIX" +
+                "XDDDDDDD__XXXXX___XXXXIX" +
+                "XDDDDDDX__XXXXX________X" +
+                "XDDDDDDX__XXXXX___XXLXXX" +
+                "XXXXXXDX__XXXXX__XXLLLLX" +
+                "X_________XXXXX__LLLLLLX" +
+                "_________________XXLLLLX" +
+                "X________XXHHXX___XXXXXX" +
+                "XXXXXOX__XHHHHX_________" +
+                "XOOOOOX__XHHHHH________X" +
+                "XOOOOOX__XHHHHX__XSXXXXX" +
+                "XOOOOOX__XHHHHX__XSSSSSX" +
+                "XOOOOOX__XHHHHX__XSSSSSX" +
+                "XXXXXXX_XXXXXXXX_XXXXXXXE";
 
         for (int i = 0; layout.charAt(i) != 'E'; i++) {
             if (layout.charAt(i) == 'X') {
@@ -500,9 +510,10 @@ public class Cluedo extends GUI {
 
 
         int i = 0;
-        System.out.println("Pick 1 card of each type to make a suggestion");
+        getTextOutputArea().replaceRange("Pick 1 card of each type to make a suggestion\n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         for(Card c : deck) { // print the deck
-            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
+            String output = i + ": " + c.getName() + " (" + c.getType() + ")\n";
+            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             i++;
 
             // Get the room card
@@ -511,9 +522,10 @@ public class Cluedo extends GUI {
             }
         }
 
-        System.out.println("The room is: " + player.getLocation().getRoom().getName());
+        String output = "The room is: " + player.getLocation().getRoom().getName() + "\n";
+        getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
 
-        System.out.println("Pick 1 weapon card: ");
+        getTextOutputArea().replaceRange("Pick 1 weapon card: ", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         while (!(weaponCard instanceof WeaponCard)) {
             try {
                 weaponCard = deck.get(Integer.parseInt(in.nextLine()));
@@ -523,7 +535,7 @@ public class Cluedo extends GUI {
             }
         }
 
-        System.out.println("Pick 1 character card: ");
+        getTextOutputArea().replaceRange("Pick 1 character card: \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
         while (!(charCard instanceof CharacterCard)) {
             try {
                 charCard = deck.get(Integer.parseInt(in.nextLine()));

@@ -35,6 +35,10 @@ public abstract class GUI {
 		frame.repaint();
 	}
 
+	public JTextArea getTextOutputArea() {
+		return textOutputArea;
+	}
+
 	private void initialise() {
 
 		JButton quit = new JButton("Quit");

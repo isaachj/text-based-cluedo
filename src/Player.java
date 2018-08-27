@@ -96,12 +96,15 @@ public class Player {
     /**
      * Outputs the hand to the console
      */
-    public void printHand() {
+    public String printHand() {
         int i = 0;
+        String output = "";
         for(Card c : hand) {
-            System.out.println(i + ": " + c.getName() + " (" + c.getType() + ")");
+            output = output + i + ": " + c.getName() + " (" + c.getType() + ")\n";
             i++;
         }
+
+        return output;
     }
 
     /**
