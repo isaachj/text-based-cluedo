@@ -12,7 +12,6 @@ public abstract class GUI {
 	public abstract void redraw(Graphics g);
 	//public abstract void onMove(Move m); todo: implement
 	public abstract void onClick(MouseEvent e);
-
 	public enum Move {
 		NORTH, SOUTH, EAST, WEST
 	}
@@ -26,6 +25,8 @@ public abstract class GUI {
 	private static final int DEFAULT_DRAWING_HEIGHT = 600; // todo: pick proper values. these are tests.
 	private static final int DEFAULT_DRAWING_WIDTH = 600;
 	private static final int TEXT_OUTPUT_ROWS = 5;
+
+	int numPlayers = 0;
 
 	//private JTextField textInput; For picking names?
 
@@ -50,7 +51,7 @@ public abstract class GUI {
 				int n = JOptionPane.showConfirmDialog(
 						frame,
 						"Are you sure you want to quit?",
-						"YEETUS THAT FETUS",
+						"Exit",
 						JOptionPane.YES_NO_OPTION);
 				if (n == 0) { System.exit(0); }
 			}
@@ -62,6 +63,23 @@ public abstract class GUI {
 				resetGame();
 			}
 		});
+
+		JButton start = new JButton("Start Game");
+		start.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				Object[] possibilities = null;
+				String s = (String) JOptionPane.showInputDialog(
+						frame,
+						"Enter the number of players (3-6):",
+						"Start Game",
+						JOptionPane.PLAIN_MESSAGE,
+						null,
+						possibilities,
+						"");
+				numPlayers = Integer.valueOf(s);
+			}
+		});
+
 
 		/*      todo: Don't technically need this, might want it though.
 		JButton west = new JButton("\u2190");
@@ -131,10 +149,11 @@ public abstract class GUI {
 		menu.setBorder(edge);
 
 		JPanel quitReset = new JPanel();
-		quitReset.setLayout(new GridLayout(2, 1));
+		quitReset.setLayout(new GridLayout(2, 2));
 		// manually set a fixed size for the panel containing the load and quit
 		// buttons (doesn't change with window resize).
-		quitReset.setMaximumSize(new Dimension(50, 100));
+		quitReset.setMaximumSize(new Dimension(100, 100));
+		quitReset.add(start);
 		quitReset.add(quit);
 		menu.add(quitReset);
 		// rigid areas are invisible components that can be used to space

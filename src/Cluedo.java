@@ -15,7 +15,7 @@ public class Cluedo extends GUI {
 
     private ArrayList<Room> rooms = new ArrayList<>();
     private Board board = new Board();
-    private int numPlayers;
+    // private int numPlayers;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Card> deck = new ArrayList<>();
     private ArrayList<Card> tempDeck = new ArrayList<>();
@@ -32,7 +32,7 @@ public class Cluedo extends GUI {
         // Setup
         Scanner in = new Scanner(System.in);
         do {
-            getTextOutputArea().replaceRange("Please enter the number of players(3 - 6): \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
+            /*getTextOutputArea().replaceRange("Please enter the number of players(3 - 6): \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             try {
                 numPlayers = Integer.parseInt(in.nextLine());
             } catch (NumberFormatException nfe) {
@@ -40,7 +40,7 @@ public class Cluedo extends GUI {
             }
 
             String output = "You entered : " + numPlayers + "\n";
-            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
+            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());*/
         } while (numPlayers > 6 || numPlayers < 3);
 
         // setup players
@@ -327,6 +327,7 @@ public class Cluedo extends GUI {
     }
 
     public void redraw(Graphics g){
+        if (g == null) { return; }
         System.out.flush(); // does nothing?
         board.draw(g);
     }
