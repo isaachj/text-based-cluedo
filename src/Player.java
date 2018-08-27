@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * represents a player
  */
-public class Player extends Movable {
+public class Player extends Movable{
 
     private Tile location;
     //private String printable = "P";
@@ -28,7 +28,6 @@ public class Player extends Movable {
         name = card.getName();
         hand = new ArrayList<Card>();
         this.card = card;
-        this.c = c;
     }
 
     /**
