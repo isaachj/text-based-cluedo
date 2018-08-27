@@ -12,12 +12,13 @@ public abstract class GUI {
 	public abstract void redraw(Graphics g);
 	//public abstract void onMove(Move m); todo: implement
 	public abstract void onClick(MouseEvent e);
+	protected abstract void startGame();
 
 	public enum Move {
 		NORTH, SOUTH, EAST, WEST
 	}
 
-	private JFrame frame;
+	protected JFrame frame;
 
 	private JPanel menu;
 	private JComponent drawing;
@@ -26,8 +27,6 @@ public abstract class GUI {
 	private static final int DEFAULT_DRAWING_HEIGHT = 600; // todo: pick proper values. these are tests.
 	private static final int DEFAULT_DRAWING_WIDTH = 600;
 	private static final int TEXT_OUTPUT_ROWS = 5;
-
-	int numPlayers = 0;
 
 	//private JTextField textInput; For picking names?
 
@@ -62,23 +61,15 @@ public abstract class GUI {
 		restart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				resetGame();
+				redraw();
 			}
 		});
 
 		JButton start = new JButton("Start Game");
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				Object[] possibilities = null;
-				String s = (String) JOptionPane.showInputDialog(
-						frame,
-						"Enter the number of players (3-6):",
-						"Start Game",
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						possibilities,
-						"");
-				numPlayers = Integer.valueOf(s);
-				System.out.println("Setting num players to " + numPlayers); //todo: remove
+				startGame();
+				redraw();
 			}
 		});
 
@@ -151,11 +142,12 @@ public abstract class GUI {
 		menu.setBorder(edge);
 
 		JPanel quitReset = new JPanel();
-		quitReset.setLayout(new GridLayout(2, 2));
+		quitReset.setLayout(new GridLayout(3, 2));
 		// manually set a fixed size for the panel containing the load and quit
 		// buttons (doesn't change with window resize).
 		quitReset.setMaximumSize(new Dimension(100, 100));
 		quitReset.add(start);
+		quitReset.add(restart);
 		quitReset.add(quit);
 		menu.add(quitReset);
 		// rigid areas are invisible components that can be used to space
