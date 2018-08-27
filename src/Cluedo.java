@@ -6,7 +6,9 @@ import java.util.Scanner;
 /**
  * Contains the game logic and sets up the default game state
  */
-public class Cluedo {
+public class Cluedo extends GUI {
+
+    public void resetGame(){} // todo: finish implementing this (preferably elsewhere in the file)
 
     private final int BOARD_WIDTH = 24;
 
