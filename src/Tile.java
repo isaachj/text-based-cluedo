@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Tile {
 
-    private final int width = 10;
+    private final int width = 20;
     private int row, col;
     private Room room;
     private String printable = " ";

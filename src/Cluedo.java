@@ -12,7 +12,6 @@ public class Cluedo extends GUI {
 
     private final int BOARD_WIDTH = 24;
 
-    Graphics g;
     private ArrayList<Room> rooms = new ArrayList<>();
     private Board board = new Board();
     private int numPlayers;
@@ -110,7 +109,7 @@ public class Cluedo extends GUI {
 
         if(moving) { // If the player has decided to move
 
-            redraw(g);
+            redraw();
 
             int moves = roll(); // Find out how many moves the player will have
             System.out.println("You rolled: " + moves);
@@ -139,7 +138,7 @@ public class Cluedo extends GUI {
 
                 }
 
-                redraw(g);
+                redraw();
 
             }
         }

@@ -29,7 +29,7 @@ public abstract class GUI {
 
 	//private JTextField textInput; For picking names?
 
-	public GUI() {initialise();}
+	public GUI() { initialise(); }
 
 	public void redraw() {
 		frame.repaint();
