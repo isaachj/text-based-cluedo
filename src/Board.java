@@ -1,3 +1,5 @@
+import java.awt.*;
+
 /**
  * represents the game board
  */
@@ -34,20 +36,15 @@ public class Board {
     /**
      * Draws the board into System.out
      */
-    public void draw(){
-        String output = "";
+    public void draw(Graphics g){
 
         for (int i = 0; i < board.length; i++){
 
             for (int j = 0; j < board[1].length; j++){
 
-                output = output.concat(" " + board[i][j].getPrintable());
+                board[i][j].draw(g);
 
             }
-
-            output = output.concat("\n");
         }
-
-        System.out.print(output);
     }
 }

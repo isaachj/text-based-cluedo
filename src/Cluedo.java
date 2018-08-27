@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ public class Cluedo {
 
     private final int BOARD_WIDTH = 24;
 
+    Graphics g;
     private ArrayList<Room> rooms = new ArrayList<>();
     private Board board = new Board();
     private int numPlayers;
@@ -39,16 +41,16 @@ public class Cluedo {
         } while (numPlayers > 6 || numPlayers < 3);
 
         // setup players
-        players.add(new Player(new CharacterCard("Mrs White", 0, 9), board));
-        players.add(new Player(new CharacterCard("Mr Green", 0, 14), board));
-        players.add(new Player(new CharacterCard("Mrs Peacock", 6, 23), board));
-        if (numPlayers > 3) { players.add(new Player(new CharacterCard("Prof Plum", 19, 23), board)); }
-        if (numPlayers > 4) { players.add(new Player(new CharacterCard("Miss Scarlett", 24, 7), board)); }
-        if (numPlayers > 5) { players.add(new Player(new CharacterCard("Col Mustard", 17, 0), board));}
+        players.add(new Player(new CharacterCard("Mrs White", 0, 9), board, Color.gray));
+        players.add(new Player(new CharacterCard("Mr Green", 0, 14), board, Color.GREEN));
+        players.add(new Player(new CharacterCard("Mrs Peacock", 6, 23), board, Color.CYAN));
+        if (numPlayers > 3) { players.add(new Player(new CharacterCard("Prof Plum", 19, 23), board, Color.pink)); }
+        if (numPlayers > 4) { players.add(new Player(new CharacterCard("Miss Scarlett", 24, 7), board, Color.red)); }
+        if (numPlayers > 5) { players.add(new Player(new CharacterCard("Col Mustard", 17, 0), board, Color.yellow));}
 
-        for (Player p : players){
+        /*for (Player p : players){
             p.setPrintable(String.valueOf(players.indexOf(p) + 1));
-        }
+        }*/
 
         tempDeck.addAll(deck);
         // generate murder
@@ -87,7 +89,7 @@ public class Cluedo {
      */
     private boolean doTurn(Player p, Scanner in) {
 
-        System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn");
+        System.out.println("It is " + p.getName() + "'s (Player " + String.valueOf(players.indexOf(p) + 1) + ") turn");
         boolean moving = true;
         Room startingRoom = p.getLocation().getRoom();
         boolean suggesting = false;
@@ -106,7 +108,7 @@ public class Cluedo {
 
         if(moving) { // If the player has decided to move
 
-            redraw();
+            redraw(g);
 
             int moves = roll(); // Find out how many moves the player will have
             System.out.println("You rolled: " + moves);
@@ -135,7 +137,7 @@ public class Cluedo {
 
                 }
 
-                redraw();
+                redraw(g);
 
             }
         }
@@ -280,7 +282,7 @@ public class Cluedo {
             }
 
             if(refutable.size() > 0) {
-                System.out.println("It is " + p.getName() + "'s (Player " + (p.getPrintable()) + ") turn to refute");
+                System.out.println("It is " + p.getName() + "'s (Player " + String.valueOf(players.indexOf(p) + 1) + ") turn to refute");
                 printCardList(refutable);
                 System.out.println("The card you wish to refute with: ");
 
@@ -312,9 +314,9 @@ public class Cluedo {
         }
     }
 
-    public void redraw(){
+    public void redraw(Graphics g){
         System.out.flush(); // does nothing?
-        board.draw();
+        board.draw(g);
     }
 
     /**
@@ -387,7 +389,7 @@ public class Cluedo {
         for (int i = 0; layout.charAt(i) != 'E'; i++) {
             if (layout.charAt(i) == 'X') {
                 board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setAccessible();
-                board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setPrintable("+");
+                //board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setPrintable("+");
             } else {
                 for (Room r : rooms) {
                     if (layout.charAt(i) == r.getPrintable().charAt(0)) {

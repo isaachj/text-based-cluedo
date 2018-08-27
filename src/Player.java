@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -6,21 +7,23 @@ import java.util.ArrayList;
 public class Player {
 
     private Tile location;
-    private String printable = "P";
+    //private String printable = "P";
     private String name;
     private Board board;
     private ArrayList<Card> hand; // The cards in the player's hand
     private CharacterCard card;
     private boolean justMoved = false; // Whether or not the player has been moved by a suggestion.
     private boolean hasLost = false;
+    Color c;
 
-    public Player(CharacterCard card, Board board){
+    public Player(CharacterCard card, Board board, Color c){
         this.location = board.get(card.getStartRow(), card.getStartCol());
         this.location.setContains(this);
         this.board = board;
         name = card.getName();
         hand = new ArrayList<Card>();
         this.card = card;
+        this.c = c;
     }
 
     /**
@@ -161,13 +164,13 @@ public class Player {
      * Returns player's board symbol
      * @return - The name of the player
      */
-    public String getPrintable() {
+    /*public String getPrintable() {
         return printable;
     }
 
     public void setPrintable(String printable){
         this.printable = printable;
-    }
+    }*/
 
     /**
      * @return the location of the player
