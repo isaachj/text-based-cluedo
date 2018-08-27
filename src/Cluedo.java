@@ -10,12 +10,13 @@ import java.util.Scanner;
 public class Cluedo extends GUI {
 
     public void resetGame(){} // todo: finish implementing this (preferably elsewhere in the file)
+	public void startGame(){};
 
     private final int BOARD_WIDTH = 24;
 
     private ArrayList<Room> rooms = new ArrayList<>();
     private Board board = new Board();
-    // private int numPlayers;
+    private int numPlayers;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Card> deck = new ArrayList<>();
     private ArrayList<Card> tempDeck = new ArrayList<>();

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * represents a player
  */
-public class Player {
+public class Player extends Movable {
 
     private Tile location;
     //private String printable = "P";
@@ -14,9 +14,14 @@ public class Player {
     private CharacterCard card;
     private boolean justMoved = false; // Whether or not the player has been moved by a suggestion.
     private boolean hasLost = false;
-    Color c;
+
+    // For managing turns
+	public Player next;
+	public int moves = 0;
+	public Room startingRoom = null;
 
     public Player(CharacterCard card, Board board, Color c){
+    	super(c, "");
         this.location = board.get(card.getStartRow(), card.getStartCol());
         this.location.setContains(this);
         this.board = board;
@@ -184,5 +189,32 @@ public class Player {
 
     public ArrayList<Card> getHand() {
         return hand;
+    }
+
+	/**
+	 * @return The appropriate text based on the state of the player.
+	 */
+	public String getText() {
+    	if(moves != 0) {
+    		String s = "Moves: " + moves;
+		    if(location.getRoom() != null && !location.getRoom().equals(startingRoom) ) {
+		    	s += "\nYou can also make a suggestion from this room.";
+		    }
+		    return s;
+	    } else if(location.getRoom() != null && !location.getRoom().equals(startingRoom) ) {
+    		return "You can make a suggestion from this room!";
+	    } else {
+    		return "No moves left.";
+	    }
+    }
+
+    public boolean isValidMove(Tile t) {
+		if(!t.isAccessible() || !(t.getContains() == null)) return false;
+
+		if( // Check that the tile is one of the adjacent tiles
+				((location.getRow()+1 == t.getRow() || location.getRow()-1 == t.getRow()) && location.getCol() == t.getCol()) || // north/south
+				(location.getRow() == t.getRow() && (location.getCol()-1 == t.getCol() || location.getCol()+1 == t.getCol()))    // east/west
+		) return true;
+		return false;
     }
 }
