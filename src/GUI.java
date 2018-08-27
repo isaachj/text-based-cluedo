@@ -44,7 +44,15 @@ public abstract class GUI {
 		JButton quit = new JButton("Quit");
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				System.exit(0); // cleanly end the program.
+				/*System.exit(0); // cleanly end the program.*/
+
+				// JDialog exit = new JDialog();
+				int n = JOptionPane.showConfirmDialog(
+						frame,
+						"Are you sure you want to quit?",
+						"YEETUS THAT FETUS",
+						JOptionPane.YES_NO_OPTION);
+				if (n == 0) { System.exit(0); }
 			}
 		});
 
