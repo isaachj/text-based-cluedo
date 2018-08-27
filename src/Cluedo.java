@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -547,6 +548,29 @@ public class Cluedo extends GUI {
 
         return new Suggestion(player, false, (WeaponCard) weaponCard, (RoomCard) roomCard, (CharacterCard) charCard); // Get the suggestion.
 
+    }
+
+	/**
+	 * Decides what to do when the user(s) click the mouse
+	 * @param e - the mouse event representing the click.
+	 */
+	public void onClick(MouseEvent e) {
+		if(board.isMouseOn(e)) { // if the click is on the board
+
+			// Find out what row/col the mouse clicked in.
+			int row = 0, col = 0;
+			for(int y = 0; y < board.getBoard().length; y++) {
+				for(int x = 0; x < board.getBoard()[0].length; x++) {
+					if(board.get(y, x).isMouseOn(e)) {
+						row = y;
+						col = x;
+					}
+				}
+			}
+
+			System.out.println(row + " " + col);
+			//todo: help the player move here.
+		}
     }
 
     /**
