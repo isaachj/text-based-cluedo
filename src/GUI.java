@@ -12,6 +12,7 @@ public abstract class GUI {
 	public abstract void redraw(Graphics g);
 	//public abstract void onMove(Move m); todo: implement
 	public abstract void onClick(MouseEvent e);
+
 	public enum Move {
 		NORTH, SOUTH, EAST, WEST
 	}
@@ -77,6 +78,7 @@ public abstract class GUI {
 						possibilities,
 						"");
 				numPlayers = Integer.valueOf(s);
+				System.out.println("Setting num players to " + numPlayers); //todo: remove
 			}
 		});
 

@@ -31,8 +31,8 @@ public class Cluedo extends GUI {
 
         // Setup
         Scanner in = new Scanner(System.in);
-        do {
-            /*getTextOutputArea().replaceRange("Please enter the number of players(3 - 6): \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
+        /*do {
+            getTextOutputArea().replaceRange("Please enter the number of players(3 - 6): \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
             try {
                 numPlayers = Integer.parseInt(in.nextLine());
             } catch (NumberFormatException nfe) {
@@ -40,10 +40,17 @@ public class Cluedo extends GUI {
             }
 
             String output = "You entered : " + numPlayers + "\n";
-            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());*/
-        } while (numPlayers > 6 || numPlayers < 3);
+            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
+        } while (numPlayers > 6 || numPlayers < 3);*/
+
+        while(numPlayers == 0) {
+        	try {
+		        Thread.sleep(1);
+	        } catch(InterruptedException e) {}
+        }
 
         // setup players
+	    System.out.println("The number of players is: " + numPlayers);
         players.add(new Player(new CharacterCard("Mrs White", 0, 9), board, Color.gray));
         players.add(new Player(new CharacterCard("Mr Green", 0, 14), board, Color.GREEN));
         players.add(new Player(new CharacterCard("Mrs Peacock", 6, 23), board, Color.CYAN));
