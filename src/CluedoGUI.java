@@ -395,13 +395,40 @@ public class CluedoGUI extends GUI {
 		// Get the number of players
 		numPlayers = getNumPlayers();
 
-		// Add the players to the list of players
-		players.add(new Player(new CharacterCard("Mrs White", 0, 9), board, Color.gray));
-		players.add(new Player(new CharacterCard("Mr Green", 0, 14), board, Color.GREEN));
-		players.add(new Player(new CharacterCard("Mrs Peacock", 6, 23), board, Color.CYAN));
-		if (numPlayers > 3) { players.add(new Player(new CharacterCard("Prof Plum", 19, 23), board, Color.pink)); }
-		if (numPlayers > 4) { players.add(new Player(new CharacterCard("Miss Scarlett", 24, 7), board, Color.red)); }
-		if (numPlayers > 5) { players.add(new Player(new CharacterCard("Col Mustard", 17, 0), board, Color.yellow));}
+		ArrayList<Player> playerOptions = new ArrayList<>();
+		playerOptions.add(new Player(new CharacterCard("Mrs White", 0, 9), board, Color.gray));
+		playerOptions.add(new Player(new CharacterCard("Mr Green", 0, 14), board, Color.GREEN));
+		playerOptions.add(new Player(new CharacterCard("Mrs Peacock", 6, 23), board, Color.CYAN));
+		playerOptions.add(new Player(new CharacterCard("Prof Plum", 19, 23), board, Color.pink));
+		playerOptions.add(new Player(new CharacterCard("Miss Scarlett", 24, 7), board, Color.red));
+		playerOptions.add(new Player(new CharacterCard("Col Mustard", 17, 0), board, Color.yellow));
+
+
+		JRadioButton[] options = new JRadioButton[6];
+		JPanel p = new JPanel(new GridLayout(3,10));
+		ButtonGroup bg = new ButtonGroup ();
+
+		for(int j = 0; j < options.length; j++) {
+			options[j] = new JRadioButton(playerOptions.get(j).getName());
+			bg.add (options[j]);
+			p.add(options[j]);
+		}
+
+		for (int i = 0; i < numPlayers; i++){
+
+			options[i].setSelected(true);
+
+			JOptionPane.showMessageDialog (null, p,"Choose a character", JOptionPane.PLAIN_MESSAGE);
+			for (int k = 0; k < bg.getButtonCount(); k++) {
+				if (options[k].isSelected()) {
+					String output = "Player " + i + 1 + " has chosen to play as" + playerOptions.get(k).getName();
+					getTextOutputArea().setText(output);
+					players.add(playerOptions.get(k));
+					playerOptions.get(k).addToBoard();
+					options[k].setEnabled(false);
+				}
+			}
+		}
 
 		// Add next player to each player
 		for(int i = 0; i < players.size()-1; i++) {

@@ -23,11 +23,14 @@ public class Player extends Movable{
     public Player(CharacterCard card, Board board, Color c){
     	super(c, "");
         this.location = board.get(card.getStartRow(), card.getStartCol());
-        this.location.setContains(this);
         this.board = board;
         name = card.getName();
         hand = new ArrayList<Card>();
         this.card = card;
+    }
+
+    public void addToBoard(){
+        this.location.setContains(this);
     }
 
     /**
