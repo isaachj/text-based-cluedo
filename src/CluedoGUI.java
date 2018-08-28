@@ -524,6 +524,69 @@ public class CluedoGUI extends GUI {
 		return new Suggestion(weapon, room, character);
 	}
 
+	private Suggestion getAccusation(){
+		RoomCard room = null;
+		WeaponCard weapon = null;
+		CharacterCard character = null;
+
+		String[] options = new String[rooms.size()];
+
+		for (int i = 0; i < options.length; i++){
+			options[i] = rooms.get(i).getName();
+		}
+
+		Object selected = JOptionPane.showInputDialog(null, "Choose a room to suggest", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
+		if ( selected != null ){ // null if the user cancels.
+			String selectedString = selected.toString();
+
+			for (Card c : deck){
+				if (c instanceof RoomCard && selectedString.equals(c.getName())){
+					room = (RoomCard) c;
+				}
+			}
+		}
+
+		options = new String[weapons.size()];
+
+		for (int i = 0; i < options.length; i++){
+			options[i] = weapons.get(i).s;
+		}
+
+		selected = JOptionPane.showInputDialog(null, "Choose a weapon to suggest", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
+		if ( selected != null ){ // null if the user cancels.
+			String selectedString = selected.toString();
+
+			for (Card c : deck){
+				if (c instanceof WeaponCard && selectedString.equals(c.getName())){
+					weapon = (WeaponCard) c;
+				}
+			}
+		}
+
+		options = new String[6];
+
+		for (int i = 0; i < options.length; i++){
+			for (Card c : deck){
+				if (c instanceof WeaponCard){
+					options[i] = c.getName();
+				}
+			}
+		}
+
+		selected = JOptionPane.showInputDialog(null, "Choose a character to accuse", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
+		if ( selected != null ){ // null if the user cancels.
+			String selectedString = selected.toString();
+
+			for (Card c : deck){
+				if (c instanceof CharacterCard && selectedString.equals(c.getName())){
+					character = (CharacterCard) c;
+				}
+			}
+		}
+
+		return new Suggestion(weapon, room, character);
+	}
+
 	private boolean refute(Suggestion s){
 		Player p = currentPlayer.next;
 		while(p.next != currentPlayer){
