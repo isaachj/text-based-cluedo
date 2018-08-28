@@ -15,6 +15,7 @@ public abstract class GUI {
 	protected abstract void startGame();
 	protected abstract void getASuggestion();
 	protected abstract void getAnAccusation();
+	protected abstract void nextPlayer();
 
 	public enum Move {
 		NORTH, SOUTH, EAST, WEST
@@ -101,6 +102,14 @@ public abstract class GUI {
 			}
 		});
 
+		JButton passTurn = new JButton("End Turn");
+		passTurn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				nextPlayer();
+				redraw();
+			}
+		});
+
 		/*
 		JButton quit = new JButton("Quit");
 		quit.addActionListener(new ActionListener() {
@@ -151,14 +160,15 @@ public abstract class GUI {
 		// rigid areas are invisible components that can be used to space
 		// components out.
 
-		JPanel accuseSuggest = new JPanel();
-		accuseSuggest.setLayout(new GridLayout(3, 2));
-		accuseSuggest.setMaximumSize(new Dimension(100, 100));
+		JPanel menuButtons = new JPanel();
+		menuButtons.setLayout(new GridLayout(1, 3));
+		//accuseSuggest.setMaximumSize(new Dimension(100, 500));
 
-		accuseSuggest.add(suggest);
-		accuseSuggest.add(accuse);
+		menuButtons.add(suggest);
+		menuButtons.add(accuse);
+		menuButtons.add(passTurn);
 
-		menu.add(accuseSuggest);
+		menu.add(menuButtons);
 
 		menu.add(Box.createRigidArea(new Dimension(15, 0)));
 

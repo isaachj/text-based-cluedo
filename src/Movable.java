@@ -10,4 +10,8 @@ public abstract class Movable {
 		this.s = s;
 	}
 
+	public String getName() {
+		return s;
+	}
+
 }

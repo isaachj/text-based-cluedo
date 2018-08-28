@@ -53,7 +53,6 @@ public class Player extends Movable{
             location = next;
             location.setContains(this);
         } else {
-            System.out.println("Cannot move through walls.");
             moveCost = false;
         }
 

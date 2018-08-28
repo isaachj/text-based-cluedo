@@ -113,4 +113,8 @@ public class Suggestion
     public boolean contains(Card c){
         return weapon.equals(c) || room.equals(c) || character.equals(c);
     }
+
+    public String toString() {
+        return room.getName() + " " + weapon.getName() + " " + character.getName();
+    }
 }

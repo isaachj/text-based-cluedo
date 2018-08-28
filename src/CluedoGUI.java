@@ -63,6 +63,7 @@ public class CluedoGUI extends GUI {
 	 * Happens when the player decides to make a suggestion.
 	 */
 	protected void getASuggestion() {
+		if(!gameInProgress) return;
 		Player p = currentPlayer;
 
 		if(p.getLocation().getRoom() == null || (p.getLocation().getRoom().equals(p.startingRoom) && !p.getJustMoved()) ) {
@@ -77,14 +78,39 @@ public class CluedoGUI extends GUI {
 			return;
 		}
 
-		if(refute(s)) {
-
+		for (Player p2 : players) {
+			if (p2.getName().equals(s.getCharacter().getName())) {
+				for (Room r : rooms) {
+					if (r.getName().equals(s.getRoom().getName())) {
+						Tile movingTo = r.getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+						p2.moveTo(movingTo);
+						p2.setJustMoved(true);
+					}
+				}
+			}
 		}
 
-		nextPlayer();
+		Weapon sWep = null;
+		for(Weapon w : weapons) {
+			if(w.getName().equals(s.getWeapon().getName())) {
+				sWep = w;
+			}
+		}
+		for(Room r : rooms) {
+			if(sWep != null && r.getName().equals(s.getRoom())) {
+				r.putWeapon(sWep);
+			}
+		}
+
+		if(!refute(s)) {
+			nextPlayer();
+		}
+
+		currentPlayer.moves = 0;
 	}
 
     protected void getAnAccusation() {
+		if(!gameInProgress) return;
         Player p = currentPlayer;
 
         p.setJustMoved(false);
@@ -105,7 +131,17 @@ public class CluedoGUI extends GUI {
                 "Incorrect Accusation",
                 JOptionPane.OK_OPTION);
 
+        currentPlayer.lose();
         nextPlayer();
+    }
+
+    private void gameWon() {
+	    JOptionPane.showConfirmDialog(
+			    frame,
+			    currentPlayer.getName() + "'s accusation is correct!",
+			    "You Win!",
+			    JOptionPane.OK_OPTION);
+	    resetGame();
     }
 
 	//-------------------------------------
@@ -208,12 +244,30 @@ public class CluedoGUI extends GUI {
 	/**
 	 * End the current player's turn
 	 */
-	private void nextPlayer() {
+	protected void nextPlayer() {
+		if(!gameInProgress) return;
 		currentPlayer.moves = 0;
+		int playersCount = 1;
 		currentPlayer = currentPlayer.next;
+		while(currentPlayer.hasLost()) {
+			currentPlayer = currentPlayer.next;
+			playersCount++;
+
+			if(playersCount > numPlayers) { // Check that all the players haven't lost
+				boolean allLost = true;
+				for(Player p : players) {
+					if(!p.hasLost()) allLost = false;
+				}
+				if(allLost) {
+					resetGame();
+					return;
+				}
+			}
+		}
 		currentPlayer.moves = roll();
 		currentPlayer.startingRoom = currentPlayer.getLocation().getRoom();
 		getTextOutputArea().setText(getPlayerTurnText());
+		System.out.println(murder.toString());
 	}
 
 	/**
@@ -259,12 +313,12 @@ public class CluedoGUI extends GUI {
 
 		options = new String[6];
 
-		for (int i = 0; i < options.length; i++){
-			for (Card c : deck){
-				if (c instanceof WeaponCard){
-					options[i] = c.getName();
-				}
+		int count = 0;
+		for (Card c : deck){
+			if (c instanceof CharacterCard){
+				options[count] = c.getName();
 			}
+			count++;
 		}
 
 		selected = JOptionPane.showInputDialog(null, "Choose a character to accuse", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
