@@ -58,7 +58,6 @@ public class CluedoGUI extends GUI {
 			}
 
 			checkPlayerTurn();
-			//todo: help the player move here.
 		}
 	}
 
@@ -77,6 +76,10 @@ public class CluedoGUI extends GUI {
 		printRoomLabels(g);
 	}
 
+	/**
+	 * Draws the key to link each room to its corresponding colour
+	 * @param g graphics object to modify
+	 */
 	public void printRoomLabels(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.drawString("Kitchen", 50, 550);
@@ -292,6 +295,9 @@ public class CluedoGUI extends GUI {
 		doWeapons();
 	}
 
+	/**
+	 *
+	 */
 	private void doWeapons() {
 		// Weapons
 		Tile startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findAny().get();
@@ -307,6 +313,10 @@ public class CluedoGUI extends GUI {
 		}
 	}
 
+	/**
+	 * Pick a room at random then returns the first free tile in the room
+	 * @return first tile in a randomly selected room
+	 */
 	private Tile randomTile(){
 		return rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().skip(rooms.size() - 2).filter(tile -> tile.getContains() == null).findFirst().get();
 	}

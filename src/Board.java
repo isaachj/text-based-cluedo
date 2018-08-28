@@ -14,7 +14,6 @@ public class Board {
     }
 
     /**
-     * todo: remove this (Obsolete)
      * @return The board array
      */
     public Tile[][] getBoard() {

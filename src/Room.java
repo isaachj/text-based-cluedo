@@ -47,10 +47,14 @@ public class Room {
     void setPrintable(){
         for (Tile t : tiles){
             t.setRoom(this);
-            t.setPrintable(printable);
         }
     }
 
+    /**
+     * Adds a weapon object to the room in the first 'safe' tiles
+     * Safe tiles are tiles where a weapon can be placed without blocking movement
+     * @param w the weapon object to be added
+     */
     void putWeapon(Weapon w) {
         for(int i : safeTiles) {
             if(tiles.get(i).getContains() == null) {

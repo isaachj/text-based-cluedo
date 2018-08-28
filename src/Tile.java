@@ -11,7 +11,6 @@ public class Tile {
     public static int width = 20;
     private int row, col;
     private Room room;
-    private String printable = " ";
     private boolean accessible = true;
     private Movable contains = null;
 
@@ -46,30 +45,26 @@ public class Tile {
 
     public void setAccessible() { accessible = !accessible; }
 
-    /*public String getPrintable(){
-        if (contains != null) { return contains.getPrintable(); }
-        return printable;
-    }*/
-
-    public void setPrintable(String printable) {
-        this.printable = printable;
-    }
-
     public void draw(Graphics g){
         g.setColor(Color.black);
+
+        // draws inaccessible tiles
         if (!isAccessible()) {
             g.fillRect(col * width + 20, row * width + 20, width, width);
             return;
         }
 
+        // colours room tiles
         if (room != null) {
             g.setColor(room.color);
             g.fillRect(col * width + 20, row * width + 20, width, width);
         }
 
+        // draws grid
         g.setColor(Color.black);
         g.drawRect(col * width + 20, row * width + 20, width, width);
 
+        // draws players and weapons
         if (contains != null) {
             g.setColor(contains.c);
             if (contains instanceof Player) {

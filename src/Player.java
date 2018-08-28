@@ -31,29 +31,6 @@ public class Player extends Movable{
     }
 
     /**
-     * Decides what to do based on the input.
-     * @param input - A string representing the input character.
-     */
-    public boolean parseInput(String input){
-
-        switch (input.toUpperCase()){
-            case "W":
-                return move(-1, 0);
-            case "S":
-                return move(1, 0);
-            case "A":
-                return move(0, -1);
-            case "D":
-                return move(0, 1);
-            default:
-                System.out.println("Not a valid direction");
-                return false;
-
-        }
-
-    }
-
-    /**
      * Moves the player by the specified amount.
      * @param drow - The change in row.
      * @param dcol - The change in column.
@@ -98,7 +75,7 @@ public class Player extends Movable{
     }
 
     /**
-     * Outputs the hand to the console
+     * returns hand as a string to be outputted
      */
     public String printHand() {
         int i = 0;
