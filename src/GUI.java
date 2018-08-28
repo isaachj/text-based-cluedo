@@ -42,10 +42,52 @@ public abstract class GUI {
 
 	private void initialise() {
 
+		// Do the menu
+		JMenuBar menuBar = new JMenuBar();
+		JMenu subMenu = new JMenu("Menu");
+		menuBar.add(subMenu);
+
+		// Start Button
+		JMenuItem startButton = new JMenuItem("Start Game");
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				startGame();
+				redraw();
+			}
+		});
+		subMenu.add(startButton);
+
+		JMenuItem resetButton = new JMenuItem("Reset");
+		resetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				resetGame();
+				redraw();
+			}
+		});
+		subMenu.add(resetButton);
+
+		// Quit Button
+		JMenuItem quitButton = new JMenuItem("Quit");
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				/*System.exit(0); // cleanly end the program.*/
+
+				// JDialog exit = new JDialog();
+				int n = JOptionPane.showConfirmDialog(
+						frame,
+						"Are you sure you want to quit?",
+						"Exit",
+						JOptionPane.YES_NO_OPTION);
+				if (n == 0) { System.exit(0); }
+			}
+		});
+		subMenu.add(quitButton);
+
+		/*
 		JButton quit = new JButton("Quit");
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				/*System.exit(0); // cleanly end the program.*/
+				/*System.exit(0); // cleanly end the program.
 
 				// JDialog exit = new JDialog();
 				int n = JOptionPane.showConfirmDialog(
@@ -71,7 +113,7 @@ public abstract class GUI {
 				startGame();
 				redraw();
 			}
-		});
+		});*/
 
 
 		menu = new JPanel();
@@ -80,13 +122,16 @@ public abstract class GUI {
 		Border edge = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 		menu.setBorder(edge);
 
-		JPanel quitReset = new JPanel();
+		/*JPanel quitReset = new JPanel();
 		quitReset.setLayout(new GridLayout(3, 2));
 		quitReset.setMaximumSize(new Dimension(100, 100));
 		quitReset.add(start);
 		quitReset.add(restart);
 		quitReset.add(quit);
 		menu.add(quitReset);
+		menu.add(quitReset);*/
+		// rigid areas are invisible components that can be used to space
+		// components out.
 		menu.add(Box.createRigidArea(new Dimension(15, 0)));
 
 		drawing = new JComponent() {
@@ -125,6 +170,7 @@ public abstract class GUI {
 		frame = new JFrame("Cluedo");
 		// this makes the program actually quit when the frame's close button is
 		// pressed.
+		frame.setJMenuBar(menuBar); // Add the menu bar
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(menu, BorderLayout.NORTH);
