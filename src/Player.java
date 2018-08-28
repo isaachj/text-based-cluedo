@@ -126,7 +126,7 @@ public class Player extends Movable{
      */
     public boolean hasLost() {return hasLost;}
 
-    public void lose() {hasLost = true;}
+    public void lose() { hasLost = true;}
 
     /**
      * Returns true if the card provided represents the player's character.

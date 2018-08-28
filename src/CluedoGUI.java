@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Contains the game logic and sets up the default game state
@@ -17,6 +16,7 @@ public class CluedoGUI extends GUI {
 	private ArrayList<Room> rooms = new ArrayList<>();
 	private Board board = new Board();
 	private int numPlayers;
+	private ArrayList<Weapon> weapons = new ArrayList<>();
 	private ArrayList<Player> players = new ArrayList<>();
 	private ArrayList<Card> deck = new ArrayList<>();
 	private ArrayList<Card> tempDeck = new ArrayList<>();
@@ -74,6 +74,18 @@ public class CluedoGUI extends GUI {
 		if (g == null) { return; }
 		System.out.flush(); // does nothing?
 		board.draw(g);
+		printRoomLabels(g);
+	}
+
+	public void printRoomLabels(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.drawString("Kitchen", 60, 15);
+		g.drawString("Ball Room", 235, 15);
+		g.drawString("Conservatory", 400, 15);
+
+		g.drawString("Study", 400, 535);
+		g.drawString("Hall", 235, 535);
+		g.drawString("Lounge", 60, 535);
 	}
 
 	/**
@@ -245,6 +257,20 @@ public class CluedoGUI extends GUI {
 		for (Room r : rooms){
 			r.setPrintable();
 		}
+
+		// Weapons
+		Tile startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Candlestick", board));
+		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Dagger", board));
+		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Lead Pipe", board));
+		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Revolver", board));
+		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Rope", board));
+		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Spanner", board));
 	}
 
 	/**

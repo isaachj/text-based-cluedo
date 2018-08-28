@@ -20,6 +20,7 @@ public class Cluedo extends GUI {
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Card> deck = new ArrayList<>();
     private ArrayList<Card> tempDeck = new ArrayList<>();
+    private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<Suggestion> accusations = new ArrayList<>();
     private Suggestion murder;
 
@@ -32,26 +33,14 @@ public class Cluedo extends GUI {
 
         // Setup
         Scanner in = new Scanner(System.in);
-        /*do {
-            getTextOutputArea().replaceRange("Please enter the number of players(3 - 6): \n", getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
-            try {
-                numPlayers = Integer.parseInt(in.nextLine());
-            } catch (NumberFormatException nfe) {
-                System.err.println("Invalid Format!");
-            }
-
-            String output = "You entered : " + numPlayers + "\n";
-            getTextOutputArea().replaceRange(output, getTextOutputArea().getSelectionStart(), getTextOutputArea().getSelectionEnd());
-        } while (numPlayers > 6 || numPlayers < 3);*/
 
         while(numPlayers == 0) {
-        	try {
-		        Thread.sleep(1);
-	        } catch(InterruptedException e) {}
+            try {
+                Thread.sleep(1);
+            } catch(InterruptedException e) {}
         }
 
         // setup players
-	    System.out.println("The number of players is: " + numPlayers);
         players.add(new Player(new CharacterCard("Mrs White", 0, 9), board, Color.gray));
         players.add(new Player(new CharacterCard("Mr Green", 0, 14), board, Color.GREEN));
         players.add(new Player(new CharacterCard("Mrs Peacock", 6, 23), board, Color.CYAN));
@@ -424,6 +413,22 @@ public class Cluedo extends GUI {
         for (Room r : rooms){
             r.setPrintable();
         }
+
+        // Weapons
+        Tile startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+        weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Candlestick", board));
+        startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+        weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Dagger", board));
+        startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+        weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Lead Pipe", board));
+        startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+        weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Revolver", board));
+        startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+        weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Rope", board));
+        startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+        weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Spanner", board));
+        startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+        weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Spanner", board));
     }
 
     /**
