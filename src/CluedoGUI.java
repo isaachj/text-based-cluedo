@@ -259,18 +259,24 @@ public class CluedoGUI extends GUI {
 		}
 
 		// Weapons
-		Tile startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
-		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Candlestick", board));
-		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
-		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Dagger", board));
-		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
-		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Lead Pipe", board));
-		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
-		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Revolver", board));
-		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
-		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Rope", board));
-		startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
-		weapons.add(new Weapon(startTile.getCol(),startTile.getRow(),"Spanner", board));
+		Tile t = randomTile();
+		weapons.add(new Weapon(t.getCol(),t.getRow(),"Candlestick", board));
+		t = randomTile();
+		weapons.add(new Weapon(t.getCol(),t.getRow(),"Dagger", board));
+		t = randomTile();
+		weapons.add(new Weapon(t.getCol(),t.getRow(),"Lead Pipe", board));
+		t = randomTile();
+		weapons.add(new Weapon(t.getCol(),t.getRow(),"Revolver", board));
+		t = randomTile();
+		weapons.add(new Weapon(t.getCol(),t.getRow(),"Rope", board));
+		t = randomTile();
+		weapons.add(new Weapon(t.getCol(),t.getRow(),"Spanner", board));
+	}
+
+	private Tile randomTile(){
+		Tile t = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
+		System.out.println(t.getRoom().getName());
+		return t;
 	}
 
 	/**
