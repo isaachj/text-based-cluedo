@@ -77,14 +77,36 @@ public class CluedoGUI extends GUI {
 			return;
 		}
 
-
-
 		if(refute(s)) {
 
 		}
 
 		nextPlayer();
 	}
+
+    protected void getAnAccusation() {
+        Player p = currentPlayer;
+
+        p.setJustMoved(false);
+
+        Suggestion s = getAccusation();
+
+        if(s == null) {
+            return;
+        }
+
+        if (s.equals(murder)){
+            gameWon();
+        }
+
+        JOptionPane.showConfirmDialog(
+                frame,
+                p.getName() + "'s accusation is incorrect",
+                "Incorrect Accusation",
+                JOptionPane.OK_OPTION);
+
+        nextPlayer();
+    }
 
 	//-------------------------------------
 	// Reused Methods
