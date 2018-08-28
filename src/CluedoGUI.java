@@ -243,7 +243,6 @@ public class CluedoGUI extends GUI {
 		for (int i = 0; layout.charAt(i) != 'E'; i++) {
 			if (layout.charAt(i) == 'X') {
 				board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setAccessible();
-				//board.getBoard()[i / BOARD_WIDTH][i % BOARD_WIDTH].setPrintable("+");
 			} else {
 				for (Room r : rooms) {
 					if (layout.charAt(i) == r.getPrintable().charAt(0)) {
@@ -274,9 +273,7 @@ public class CluedoGUI extends GUI {
 	}
 
 	private Tile randomTile(){
-		Tile t = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findFirst().get();
-		System.out.println(t.getRoom().getName());
-		return t;
+		return rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().skip(rooms.size() - 2).filter(tile -> tile.getContains() == null).findFirst().get();
 	}
 
 	/**

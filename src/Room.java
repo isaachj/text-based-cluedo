@@ -9,11 +9,13 @@ public class Room {
     private ArrayList<Tile> tiles = new ArrayList<>(); // list of the tiles inside the room
     private Board board;
     private String printable;
+    public int[] safeTiles;
 
-    Room(String name, Board board, String printable){
+    Room(String name, Board board, String printable, int[] safeTiles){
         this.name = name;
         this.board = board;
         this.printable = printable;
+        this.safeTiles = safeTiles;
     }
 
     public boolean equals(Room r) {

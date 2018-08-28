@@ -8,7 +8,7 @@ public class Weapon extends Movable {
     public Weapon (int startX, int startY, String name, Board b){
         super(Color.BLACK, name);
         this.board = b;
-        location = board.getBoard()[startX][startY];
+        location = board.get(startY, startX);
         this.location.setContains(this);
     }
 
