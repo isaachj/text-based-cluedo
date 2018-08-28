@@ -490,7 +490,7 @@ public class CluedoGUI extends GUI {
 		}
 
 		Object selected = JOptionPane.showInputDialog(null, "Choose a weapon to suggest", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
-		if ( selected != null ){//null if the user cancels.
+		if ( selected != null ){ // null if the user cancels.
 			String selectedString = selected.toString();
 
 			for (Card c : deck){
@@ -511,7 +511,7 @@ public class CluedoGUI extends GUI {
 		}
 
 		selected = JOptionPane.showInputDialog(null, "Choose a character to accuse", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
-		if ( selected != null ){//null if the user cancels.
+		if ( selected != null ){ // null if the user cancels.
 			String selectedString = selected.toString();
 
 			for (Card c : deck){
@@ -522,6 +522,35 @@ public class CluedoGUI extends GUI {
 		}
 
 		return new Suggestion(weapon, room, character);
+	}
+
+	private boolean refute(Suggestion s){
+		Player p = currentPlayer.next;
+		while(p.next != currentPlayer){
+
+			ArrayList<String> options = new ArrayList<>();
+
+			if (p.getHand().contains(s.getCharacter())) { options.add(s.getCharacter().getName()); }
+			if (p.getHand().contains(s.getWeapon())) { options.add(s.getWeapon().getName()); }
+			if (p.getHand().contains(s.getRoom())) { options.add(s.getRoom().getName()); }
+
+			if (options.size() > 0){
+				Object selected = JOptionPane.showInputDialog(null, "Choose a card to refute with", "Selection", JOptionPane.DEFAULT_OPTION, null, options.toArray(), "0");
+				if ( selected != null ){ // null if the user cancels.
+					String selectedString = selected.toString();
+
+					JOptionPane.showConfirmDialog(
+							frame,
+							p.getName() + " has refuted the suggestion with " + selectedString,
+							"Refuted",
+							JOptionPane.OK_OPTION);
+				}
+
+				return true;
+			}
+
+		}
+		return false;
 	}
 
 	protected void startGame() {
