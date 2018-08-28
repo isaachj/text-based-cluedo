@@ -115,6 +115,7 @@ public class CluedoGUI extends GUI {
 		murder = null;
 		currentPlayer = null;
 		gameInProgress = false;
+		weapons = new ArrayList<Weapon>();
 		setUpBoard();
 		super.redraw();
 	}
@@ -192,15 +193,24 @@ public class CluedoGUI extends GUI {
 	 */
 	public void setUpRooms(){
 
-		rooms.add(new Room("Kitchen", board, "K"));
-		rooms.add(new Room("Ball Room", board, "B"));
-		rooms.add(new Room("Conservatory", board, "C"));
-		rooms.add(new Room("Billiard Room", board, "I"));
-		rooms.add(new Room("Library", board, "L"));
-		rooms.add(new Room("Study", board, "S"));
-		rooms.add(new Room("Hall", board, "H"));
-		rooms.add(new Room("Lounge", board, "O"));
-		rooms.add(new Room("Dining Room", board, "D"));
+		int[] safeTiles1 = {0,1,2,3,6,7};
+		rooms.add(new Room("Kitchen", board, "K", safeTiles1));
+		int[] safeTiles2 = {0,1,2,3,6,7};
+		rooms.add(new Room("Ball Room", board, "B", safeTiles2));
+		int[] safeTiles3 = {0,1,2,3,11,12};
+		rooms.add(new Room("Conservatory", board, "C", safeTiles3));
+		int[] safeTiles4 = {2,3,4,6,7,8};
+		rooms.add(new Room("Billiard Room", board, "I", safeTiles4));
+		int[] safeTiles5 = {1,3,4,12,13,14};
+		rooms.add(new Room("Library", board, "L", safeTiles5));
+		int[] safeTiles6 = {5,10,7,8,6,9};
+		rooms.add(new Room("Study", board, "S", safeTiles6));
+		int[] safeTiles7 = {2,5,6,11,14,15};
+		rooms.add(new Room("Hall", board, "H", safeTiles7));
+		int[] safeTiles8 = {1,2,3,4,16,17};
+		rooms.add(new Room("Lounge", board, "O", safeTiles8));
+		int[] safeTiles9 = {0,1,2,6,7,8};
+		rooms.add(new Room("Dining Room", board, "D", safeTiles9));
 
 		parseLayout();
 
@@ -257,19 +267,22 @@ public class CluedoGUI extends GUI {
 			r.setPrintable();
 		}
 
+		doWeapons();
+	}
+
+	private void doWeapons() {
 		// Weapons
-		Tile t = randomTile();
-		weapons.add(new Weapon(t.getCol(),t.getRow(),"Candlestick", board));
-		t = randomTile();
-		weapons.add(new Weapon(t.getCol(),t.getRow(),"Dagger", board));
-		t = randomTile();
-		weapons.add(new Weapon(t.getCol(),t.getRow(),"Lead Pipe", board));
-		t = randomTile();
-		weapons.add(new Weapon(t.getCol(),t.getRow(),"Revolver", board));
-		t = randomTile();
-		weapons.add(new Weapon(t.getCol(),t.getRow(),"Rope", board));
-		t = randomTile();
-		weapons.add(new Weapon(t.getCol(),t.getRow(),"Spanner", board));
+		Tile startTile = rooms.get((int) (Math.random() * rooms.size())).getTiles().stream().filter(tile -> tile.getContains() == null).findAny().get();
+		weapons.add(new Weapon("Candlestick", board));
+		weapons.add(new Weapon("Dagger", board));
+		weapons.add(new Weapon("Lead Pipe", board));
+		weapons.add(new Weapon("Revolver", board));
+		weapons.add(new Weapon("Rope", board));
+		weapons.add(new Weapon("Spanner", board));
+
+		for (Weapon w : weapons) {
+			rooms.get((int) (Math.random() * rooms.size())).putWeapon(w);
+		}
 	}
 
 	private Tile randomTile(){

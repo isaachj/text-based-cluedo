@@ -9,7 +9,7 @@ public class Room {
     private ArrayList<Tile> tiles = new ArrayList<>(); // list of the tiles inside the room
     private Board board;
     private String printable;
-    public int[] safeTiles;
+    private int[] safeTiles;
 
     Room(String name, Board board, String printable, int[] safeTiles){
         this.name = name;
@@ -45,6 +45,15 @@ public class Room {
         for (Tile t : tiles){
             t.setRoom(this);
             t.setPrintable(printable);
+        }
+    }
+
+    void putWeapon(Weapon w) {
+        for(int i : safeTiles) {
+            if(tiles.get(i).getContains() == null) {
+                w.putIn(tiles.get(i));
+                break;
+            }
         }
     }
 }
