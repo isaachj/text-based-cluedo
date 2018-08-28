@@ -79,13 +79,35 @@ public class CluedoGUI extends GUI {
 
 	public void printRoomLabels(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawString("Kitchen", 60, 15);
-		g.drawString("Ball Room", 235, 15);
-		g.drawString("Conservatory", 400, 15);
+		g.drawString("Kitchen", 50, 550);
+		g.drawString("Ball Room", 150, 550);
+		g.drawString("Conservatory", 250, 550);
+		g.drawString("Billiard Room", 350, 550);
+		g.drawString("Library", 450, 550);
+		g.drawString("Study", 50, 565);
+		g.drawString("Hall", 150, 565);
+		g.drawString("Lounge", 250, 565);
+		g.drawString("Dining Room", 350, 565);
 
-		g.drawString("Study", 400, 535);
-		g.drawString("Hall", 235, 535);
-		g.drawString("Lounge", 60, 535);
+		int i = 0;
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(40, 540, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(140, 540, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(240, 540, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(340, 540, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(440, 540, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(40, 555, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(140, 555, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(240, 555, 10, 10);
+		g.setColor(rooms.get(i++).color);
+		g.fillRect(340, 555, 10, 10);
 	}
 
 	/**
@@ -194,23 +216,23 @@ public class CluedoGUI extends GUI {
 	public void setUpRooms(){
 
 		int[] safeTiles1 = {0,1,2,3,6,7};
-		rooms.add(new Room("Kitchen", board, "K", safeTiles1));
+		rooms.add(new Room("Kitchen", board, "K", safeTiles1, new Color(4, 34, 84)));
 		int[] safeTiles2 = {0,1,2,3,6,7};
-		rooms.add(new Room("Ball Room", board, "B", safeTiles2));
+		rooms.add(new Room("Ball Room", board, "B", safeTiles2, new Color(3, 79, 56)));
 		int[] safeTiles3 = {0,1,2,3,11,12};
-		rooms.add(new Room("Conservatory", board, "C", safeTiles3));
+		rooms.add(new Room("Conservatory", board, "C", safeTiles3, new Color(15, 79, 2)));
 		int[] safeTiles4 = {2,3,4,6,7,8};
-		rooms.add(new Room("Billiard Room", board, "I", safeTiles4));
+		rooms.add(new Room("Billiard Room", board, "I", safeTiles4, new Color(155, 112, 27)));
 		int[] safeTiles5 = {1,3,4,12,13,14};
-		rooms.add(new Room("Library", board, "L", safeTiles5));
+		rooms.add(new Room("Library", board, "L", safeTiles5, new Color(109, 6, 6)));
 		int[] safeTiles6 = {5,10,7,8,6,9};
-		rooms.add(new Room("Study", board, "S", safeTiles6));
+		rooms.add(new Room("Study", board, "S", safeTiles6, new Color(47, 6, 109)));
 		int[] safeTiles7 = {2,5,6,11,14,15};
-		rooms.add(new Room("Hall", board, "H", safeTiles7));
+		rooms.add(new Room("Hall", board, "H", safeTiles7, new Color(99, 11, 44)));
 		int[] safeTiles8 = {1,2,3,4,16,17};
-		rooms.add(new Room("Lounge", board, "O", safeTiles8));
+		rooms.add(new Room("Lounge", board, "O", safeTiles8, new Color(35, 71, 114)));
 		int[] safeTiles9 = {0,1,2,6,7,8};
-		rooms.add(new Room("Dining Room", board, "D", safeTiles9));
+		rooms.add(new Room("Dining Room", board, "D", safeTiles9, new Color(142, 34, 4)));
 
 		parseLayout();
 

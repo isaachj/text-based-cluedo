@@ -62,6 +62,12 @@ public class Tile {
             return;
         }
 
+        if (room != null) {
+            g.setColor(room.color);
+            g.fillRect(col * width + 20, row * width + 20, width, width);
+        }
+
+        g.setColor(Color.black);
         g.drawRect(col * width + 20, row * width + 20, width, width);
 
         if (contains != null) {
