@@ -13,6 +13,8 @@ public abstract class GUI {
 	//public abstract void onMove(Move m); todo: implement
 	public abstract void onClick(MouseEvent e);
 	protected abstract void startGame();
+	protected abstract void getASuggestion();
+	protected abstract void getAnAccusation();
 
 	public enum Move {
 		NORTH, SOUTH, EAST, WEST
@@ -83,6 +85,22 @@ public abstract class GUI {
 		});
 		subMenu.add(quitButton);
 
+		JButton suggest = new JButton("Make Suggestion");
+		suggest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				getASuggestion();
+				redraw();
+			}
+		});
+
+		JButton accuse = new JButton("Make Accusation");
+		accuse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				getAnAccusation();
+				redraw();
+			}
+		});
+
 		/*
 		JButton quit = new JButton("Quit");
 		quit.addActionListener(new ActionListener() {
@@ -132,6 +150,16 @@ public abstract class GUI {
 		menu.add(quitReset);*/
 		// rigid areas are invisible components that can be used to space
 		// components out.
+
+		JPanel accuseSuggest = new JPanel();
+		accuseSuggest.setLayout(new GridLayout(3, 2));
+		accuseSuggest.setMaximumSize(new Dimension(100, 100));
+
+		accuseSuggest.add(suggest);
+		accuseSuggest.add(accuse);
+
+		menu.add(accuseSuggest);
+
 		menu.add(Box.createRigidArea(new Dimension(15, 0)));
 
 		drawing = new JComponent() {

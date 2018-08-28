@@ -9,8 +9,6 @@ import java.util.List;
  */
 public class CluedoGUI extends GUI {
 
-
-
 	private final int BOARD_WIDTH = 24;
 
 	private ArrayList<Room> rooms = new ArrayList<>();
@@ -59,6 +57,33 @@ public class CluedoGUI extends GUI {
 
 			checkPlayerTurn();
 		}
+	}
+
+	/**
+	 * Happens when the player decides to make a suggestion.
+	 */
+	protected void getASuggestion() {
+		Player p = currentPlayer;
+
+		if(p.getLocation().getRoom() == null || (p.getLocation().getRoom().equals(p.startingRoom) && !p.getJustMoved()) ) {
+			return;
+		}
+
+		p.setJustMoved(false);
+
+		Suggestion s = getSuggestion();
+
+		if(s == null) {
+			return;
+		}
+
+
+
+		if(refute(s)) {
+
+		}
+
+		nextPlayer();
 	}
 
 	//-------------------------------------
@@ -180,6 +205,62 @@ public class CluedoGUI extends GUI {
 			getTextOutputArea().setText(getPlayerTurnText());
 		}
 		//todo: finish this?
+	}
+
+	private Suggestion getSuggestion(){
+		RoomCard room = null;
+		WeaponCard weapon = null;
+		CharacterCard character = null;
+
+		for (Card c : deck){
+			if (c instanceof RoomCard && currentPlayer.getLocation().getRoom().getName().equals(c.getName())){
+				room = (RoomCard) c;
+			}
+		}
+
+		String[] options = new String[weapons.size()];
+
+		for (int i = 0; i < options.length; i++){
+			options[i] = weapons.get(i).s;
+		}
+
+		Object selected = JOptionPane.showInputDialog(null, "Choose a weapon to suggest", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
+		if ( selected != null ){//null if the user cancels.
+			String selectedString = selected.toString();
+
+			for (Card c : deck){
+				if (c instanceof WeaponCard && selectedString.equals(c.getName())){
+					weapon = (WeaponCard) c;
+				}
+			}
+		}
+
+		options = new String[6];
+
+		for (int i = 0; i < options.length; i++){
+			for (Card c : deck){
+				if (c instanceof WeaponCard){
+					options[i] = c.getName();
+				}
+			}
+		}
+
+		selected = JOptionPane.showInputDialog(null, "Choose a character to accuse", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
+		if ( selected != null ){//null if the user cancels.
+			String selectedString = selected.toString();
+
+			for (Card c : deck){
+				if (c instanceof CharacterCard && selectedString.equals(c.getName())){
+					character = (CharacterCard) c;
+				}
+			}
+		}
+
+		if(weapon == null || room == null || character == null) {
+			return null;
+		}
+
+		return new Suggestion(weapon, room, character);
 	}
 
 
@@ -470,58 +551,6 @@ public class CluedoGUI extends GUI {
 			i++;
 			if (i == numPlayers) { i = 0; }
 		}
-	}
-
-	private Suggestion getSuggestion(){
-		RoomCard room = null;
-		WeaponCard weapon = null;
-		CharacterCard character = null;
-
-		for (Card c : deck){
-			if (c instanceof RoomCard && currentPlayer.getLocation().getRoom().getName().equals(c.getName())){
-				room = (RoomCard) c;
-			}
-		}
-
-		String[] options = new String[weapons.size()];
-
-		for (int i = 0; i < options.length; i++){
-			options[i] = weapons.get(i).s;
-		}
-
-		Object selected = JOptionPane.showInputDialog(null, "Choose a weapon to suggest", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
-		if ( selected != null ){ // null if the user cancels.
-			String selectedString = selected.toString();
-
-			for (Card c : deck){
-				if (c instanceof WeaponCard && selectedString.equals(c.getName())){
-					weapon = (WeaponCard) c;
-				}
-			}
-		}
-
-		options = new String[6];
-
-		for (int i = 0; i < options.length; i++){
-			for (Card c : deck){
-				if (c instanceof WeaponCard){
-					options[i] = c.getName();
-				}
-			}
-		}
-
-		selected = JOptionPane.showInputDialog(null, "Choose a character to accuse", "Selection", JOptionPane.DEFAULT_OPTION, null, options, "0");
-		if ( selected != null ){ // null if the user cancels.
-			String selectedString = selected.toString();
-
-			for (Card c : deck){
-				if (c instanceof CharacterCard && selectedString.equals(c.getName())){
-					character = (CharacterCard) c;
-				}
-			}
-		}
-
-		return new Suggestion(weapon, room, character);
 	}
 
 	private boolean refute(Suggestion s){
